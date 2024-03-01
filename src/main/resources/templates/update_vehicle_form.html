@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <section>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-10 offset-md-2">
+                <!-- Displaying vehicleType, brandName and modelName -->
+                <div class="card" style="box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.8); border-radius: 5px; width: 75%;">
+                    <div class="card-header">
+                        <h3 style="font-weight: bold">Vehicle Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr>
+                                <th scope="row">Vehicle Type</th>
+                                <td><span th:text="${vehicle.vehicleType}"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Brand Name</th>
+                                <td><span th:text="${vehicle.brandName}"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Model Name</th>
+                                <td><span th:text="${vehicle.modelName}"></span></td>
+                            </tr>
+                            </tbody>
+                            <tr>
+                                <th scope="row">Model Type</th>
+                                <td><span th:text="${vehicle.modelType}"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Registration Number</th>
+                                <td><span th:text="${vehicle.registrationNumber}"></span></td>
+                            </tr>
+                        </table>
+
+                        <!-- Input fields for updating vehicle details -->
+                        <h3 class="mt-5" style="font-weight: bold">Update Details</h3>
+
+                        <form th:action="@{/user/update-vehicle-details}" method="post">
+
+                            <!-- Hidden input field for vehicle id -->
+                            <input type="hidden" name="vehicleId" th:value="${vehicle.id}">
+
+                            <!-- Update seating capacity -->
+                            <div class="form-group">
+                                <label for="seatingCapacity">Seating Capacity</label>
+                                <input type="text" class="form-control" id="seatingCapacity"
+                                       name="seatingCapacity" th:value="${vehicle.seatingCapacity}">
+                            </div>
+
+                            <!--Update Mileage -->
+                            <div class="form-group">
+                                <label for="mileage">Mileage</label>
+                                <input type="text" class="form-control" id="mileage"
+                                       name="mileage" th:value="${vehicle.mileage}">
+                            </div>
+
+                            <!-- Update EngineCC -->
+                            <div class="form-group">
+                                <label for="engineCC">Engine CC</label>
+                                <input type="text" class="form-control" id="engineCC"
+                                       name="engineCC" th:value="${vehicle.engineCC}">
+                            </div>
+
+                            <!-- Distance travelled -->
+                            <div class="form-group">
+                                <label for="distanceTravelled">Distance Travelled</label>
+                                <input type="text" class="form-control" id="distanceTravelled"
+                                       name="distanceTravelled" th:value="${vehicle.distanceTravelled}">
+                            </div>
+
+                            <!-- Update Fuel Type -->
+                            <div class="form-group">
+                                <label for="fuelType">Fuel Type</label>
+                                <select class="form-control" id="fuelType" name="fuelType">
+                                    <option selected th:text="${vehicle.fuelType}"></option>
+                                    <option value="Petrol">Petrol</option>
+                                    <option value="Diesel">Diesel</option>
+                                    <option value="CNG">CNG</option>
+                                    <option value="Electric">Electric</option>
+                                    <option value="LPG">LPG</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Transmission Type -->
+                            <div class="form-group">
+                                <label for="transmissionType">Transmission Type</label>
+                                <select class="form-control" id="transmissionType" name="transmissionType">
+                                    <option selected th:text="${vehicle.transmissionType}"></option>
+                                    <option value="Manual Transmission(MT)">Manual Transmission(MT)</option>
+                                    <option value="Intelligent manual transmission (IMT)">Intelligent manual transmission (IMT)</option>
+                                    <option value="Automated manual transmission (AMT)">Automated manual transmission (AMT)</option>
+                                    <option value="Automatic transmission (AT)">Automatic transmission (AT)</option>
+                                    <option value="Continuously variable transmission (CVT)">Continuously variable transmission (CVT)</option>
+                                    <option value="Semi-automatic transmission (SMT)">Semi-automatic transmission (SMT)</option>
+                                    <option value="Dual-clutch transmission(DCT)">Dual-clutch transmission(DCT)</option>
+                                    <option value="Sequential transmission (ST)">Sequential transmission (ST)</option>
+                                    <option value="Torque converter transmission (TCT)">Torque converter transmission (TCT)</option>
+                                    <option value="Tiptronic transmission">Tiptronic transmission</option>
+                                </select>
+                            </div>
+
+                            <!-- Update registration date -->
+                            <div class="form-group">
+                                <label for="registrationDate">Registration Date</label>
+                                <input type="date" class="form-control" id="registrationDate"
+                                       name="registrationDate" th:value="${registrationDate}">
+                            </div>
+
+
+                            <!-- Owner Contact Number input field -->
+                            <div class="form-group">
+                                <label for="ownerContactNumber">Owner Contact Number</label>
+                                <input type="text" class="form-control"
+                                       id="ownerContactNumber" name="ownerContactNumber"
+                                       th:value="${vehicle.ownerContactNumber}">
+                            </div>
+
+                            <!-- House/Shop Number input field -->
+                            <div class="form-group">
+                                <label for="houseNumber_shopNumber">House/Shop Number</label>
+                                <input type="text" class="form-control"
+                                       id="houseNumber_shopNumber" name="houseNumber_shopNumber"
+                                       th:value="${vehicle.houseNumber_shopNumber}">
+                            </div>
+
+                            <!-- Street Name/Number input field -->
+                            <div class="form-group">
+                                <label for="streetName_streetNumber">Street Name/Number</label>
+                                <input type="text" class="form-control"
+                                       id="streetName_streetNumber" name="streetName_streetNumber"
+                                       th:value="${vehicle.streetName_streetNumber}">
+                            </div>
+
+                            <!-- Colony input field -->
+                            <div class="form-group">
+                                <label for="colony">Colony</label>
+                                <input type="text" class="form-control"
+                                       id="colony" name="colony" th:value="${vehicle.colony}">
+                            </div>
+
+                            <!-- Country, State, City dropdown -->
+                            <div class="d-flex">
+                                <!-- Country dropdown -->
+                                <div class="form-group p-2">
+                                    <label for="country">Country</label>
+                                    <select class="form-control country" name="country" id="country" required onchange="loadStates()">
+                                        <option selected th:text="${vehicle.country}"></option>
+                                    </select>
+                                </div>
+
+                                <!-- State dropdown -->
+                                <div class="form-group p-2">
+                                    <label for="state">State</label>
+                                    <select class="form-control state" name="state" id="state" required onchange="loadCities()">
+                                        <option selected th:text="${vehicle.state}"></option>
+                                    </select>
+                                </div>
+
+                                <!-- City dropdown -->
+                                <div class="form-group p-2">
+                                    <label for="city">City</label>
+                                    <select class="form-control city" name="city" id="city" required>
+                                        <option selected th:text="${vehicle.city}"></option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <!-- Update pincode -->
+                            <div class="form-group">
+                                <label for="pincode">Pincode</label>
+                                <input type="text" class="form-control" id="pincode"
+                                       name="pincode" th:value="${vehicle.pincode}">
+                            </div>
+
+                            <div class="mt-4 text-center">
+                                <!-- Update registration certificate -->
+                                <div class="form-group mb-5 border border-dark">
+                                    <label for="registrationCertificate" style="font-weight: bold">Registration Certificate</label>
+                                    <input type="file" class="form-control w-50 text-center ml-auto mr-auto" id="registrationCertificate" name="registrationCertificate">
+                                    <img th:src="@{/images/__${vehicle.registrationCertificateImage}__}" alt="Registration Certificate" class="img-fluid w-50 h-50">
+                                </div>
+
+                                <!-- update front view image -->
+                                <div class="form-group mb-5 border border-dark">
+                                    <label for="frontViewImage" style="font-weight: bold">Front View Image</label>
+                                    <input type="file" class="form-control w-50 text-center ml-auto mr-auto" id="frontViewImage" name="frontView">
+                                    <img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View Image" class="img-fluid w-50 h-50">
+                                </div>
+
+                                <!-- update back view image -->
+                                <div class="form-group mb-5 border border-dark">
+                                    <label for="backViewImage" style="font-weight: bold">Back View Image</label>
+                                    <input type="file" class="form-control w-50 text-center ml-auto mr-auto" id="backViewImage" name="backView">
+                                    <img th:src="@{/images/__${vehicle.backViewImage}__}" alt="Back View Image" class="img-fluid w-50 h-50">
+                                </div>
+
+                                <!-- update left view image -->
+                                <div class="form-group mb-5 border border-dark">
+                                    <label for="leftViewImage" style="font-weight: bold">Left View Image</label>
+                                    <input type="file" class="form-control w-50 text-center ml-auto mr-auto" id="leftViewImage" name="leftView">
+                                    <img th:src="@{/images/__${vehicle.leftViewImage}__}" alt="Left View Image" class="img-fluid w-50 h-50">
+                                </div>
+
+                                <!-- update right view image -->
+                                <div class="form-group mb-5 border border-dark">
+                                    <label for="rightViewImage" style="font-weight: bold">Right View Image</label>
+                                    <input type="file" class="form-control w-50 text-center ml-auto mr-auto" id="rightViewImage" name="rightView">
+                                    <img th:src="@{/images/__${vehicle.rightViewImage}__}" alt="Right View Image" class="img-fluid w-50 h-50">
+                                </div>
+                            </div>
+
+                            <!-- success/alert message -->
+                            <div th:if="${message}" th:classappend="${message.type}" role="alert">
+                                <!-- Display the Message -->
+                                <p class="text-center" th:text="${message.text}"></p>
+                            </div>
+
+                            <div class="text-center m-4">
+                                <!-- Cancel button -->
+                                <button type="button" class="btn btn-secondary">Cancel</button>
+                                <!-- Submit button -->
+                                <button type="submit" class="btn btn-primary">Update</button>
+                                <!-- Reset button -->
+                                <button type="reset" class="btn btn-danger">Reset</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</body>
+</html>

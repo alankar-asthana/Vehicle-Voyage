@@ -1,0 +1,150 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicle Details - VehicleVoyage</title>
+</head>
+<body>
+<section>
+    <div class="row justify-content-center mt-5 mb-5 mr-5">
+        <div class="col-md-10 offset-md-2">
+            <div class="card" id="vehicleDetailsTable">
+                <!-- Error Message -->
+                <div th:if="${message}" th:classappend="${message.type}" role="alert">
+                    <!-- Display the Message -->
+                    <p class="text-center" th:text="${message.text}"></p>
+                </div>
+
+                <div class="card-header">
+                    <h1>Vehicle Details</h1>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Model Name</th>
+                            <td th:text="${vehicle.modelName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Registration Number</th>
+                            <td th:text="${vehicle.registrationNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Registration Date</th>
+                            <td th:text="${vehicle.registrationDate}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Brand Name</th>
+                            <td th:text="${vehicle.brandName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Vehicle Type</th>
+                            <td th:text="${vehicle.vehicleType}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Model Type</th>
+                            <td th:text="${vehicle.modelType}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Seating Capacity</th>
+                            <td th:text="${vehicle.seatingCapacity}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Fuel Type</th>
+                            <td th:text="${vehicle.fuelType}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Transmission</th>
+                            <td th:text="${vehicle.transmissionType}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Mileage</th>
+                            <td th:text="${vehicle.mileage}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">EngineCC</th>
+                            <td th:text="${vehicle.engineCC}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Distance Travelled</th>
+                            <td th:text="${vehicle.engineCC}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Owner Aadhar Number</th>
+                            <td th:text="${vehicle.ownerAadharNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Owner Contact Number</th>
+                            <td th:text="${vehicle.ownerContactNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">House/Shop Number</th>
+                            <td th:text="${vehicle.houseNumber_shopNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Street Name/Number</th>
+                            <td th:text="${vehicle.streetName_streetNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Area/Locality</th>
+                            <td th:text="${vehicle.colony}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">City</th>
+                            <td th:text="${vehicle.city}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">State</th>
+                            <td th:text="${vehicle.state}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Country</th>
+                            <td th:text="${vehicle.country}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Pincode</th>
+                            <td th:text="${vehicle.pincode}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <th scope="row">Registration Certificate</th>
+                            <td><img th:src="@{/images/__${vehicle.registrationCertificateImage}__}" alt="Registration Certificate" class="img-fluid w-50 h-50"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Front View</th>
+                            <td><img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View" class="img-fluid w-50 h-50"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Rear View</th>
+                            <td><img th:src="@{/images/__${vehicle.backViewImage}__}" alt="Rear View" class="img-fluid w-50 h-50"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Left Side View</th>
+                            <td><img th:src="@{/images/__${vehicle.leftViewImage}__}" alt="Left Side View" class="img-fluid w-50 h-50"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Right Side View</th>
+                            <td><img th:src="@{/images/__${vehicle.rightViewImage}__}" alt="Right Side View" class="img-fluid w-50 h-50"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Vehicle Added on</th>
+                            <td><span th:text="${#dates.format(vehicle.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary mr-2" th:href="@{/user/updateVehicle/{registrationNumber}(registrationNumber=${vehicle.registrationNumber})}">Update</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/sidebarstyle.css}" type="text/css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Script files -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script th:if="${someCondition}" th:src="@{/js/branddetails.js}" type="text/javascript"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg  navbar-dark bg-dark shadow pb-3">
+    <div class="container-fluid">
+        <span class="logo text-white mr-2" style="font-size: 30px"><i class="fa-solid fa-car"></i></span>
+        <a class="navbar-brand text-white logo " href="#">Vehicle Voyage</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active text-white" aria-current="page" th:href="@{/home}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#"><i class="fa-solid fa-user mr-2"></i><span th:text="${user.firstName}+' '+${user.lastName}"></span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class=" d-flex">
+    <!-- Start Sidebar -->
+    <div class="sidebar bg-dark p-3">
+<!--        <span class="text-white" style="font-size: 42px; cursor: pointer; font-weight: bold; float: right" onclick="toggleSidebar()">&times;</span>-->
+
+        <a th:href="@{/user/userdashboard}" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-house p-3"></i>Home</a>
+<!--        <a th:href="@{/user/profile}" class="item pb-3 ml-3"><i class="fa-solid fa-user p-3"></i>Profile</a>-->
+        <a th:href="@{/user/add-vehicle-form}" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-id-card p-3"></i>Add New Vehicle</a>
+        <a href="" class="item pb-3 ml-3 text-white"><i class="fas fa-plus-circle p-3"></i>Book a vehicle</a>
+        <a href="" class="item pb-3 ml-3 text-white"><i class="fas fa-history p-3"></i>Booking History</a>
+        <a href="" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-screwdriver-wrench p-3"></i>Settings</a>
+        <a th:href="@{/logout}" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-right-from-bracket p-3"></i>Logout</a>
+        <div class="divider mt-5 border"></div>
+    </div>
+    <!-- End Sidebar -->
+
+    <!-- Start Content -->
+    <div class="content position-top">
+        <i onclick="toggleSidebar()" class="fa fa-bars fa-2x mt-2 ml-3"></i>
+        <div th:replace="${content}"></div>
+    </div>
+    <!-- End Content -->
+</div>
+<!-- Footer -->
+<footer class="text-center text-lg-start text-white text-muted" style="width: 100%;">
+    <div class="text-center p-4 " style="background-color: rgba(0, 0, 0); text-color: white;">
+        © 2022 Copyright:
+        <a class="text-reset fw-bold" href="https://mdbootstrap.com/">vehiclevoyage.com</a>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script th:src="@{/js/sidebar.js}" type="text/javascript"></script>
+<script th:src="@{/js/locationAPI.js}" type="text/javascript"></script>
+<script>
+
+    var selectedVehicleType; // Define a global variable to store the selected vehicle type
+    var selectedBrandName;
+
+    // Function to update the brand dropdown based on the selected vehicle type
+    function updateBrandDropdown(vehicleType) {
+        selectedVehicleType = vehicleType;
+        $.ajax({
+            url: "/user/retrieve-brand/" + vehicleType,
+            method: "GET",
+            dataType: "json",
+            success: function(brands) {
+                $("#brandName").empty(); // Clear existing options
+                $("#brandName").append("<option value=''>Select Brand Name</option>");
+                $.each(brands, function(index, brand) {
+                    $("#brandName").append("<option value='" + brand.brandName + "'>" + brand.brandName + "</option>");
+                });
+            },
+            error: function(error) {
+                console.error("Error fetching brands:", error);
+            }
+        });
+    }
+
+    // Function to update the brand dropdown based on the selected vehicle type
+    $("input[type='radio'][name='vehicleType']").change(function() {
+        selectedVehicleType = $(this).val(); // Store the selected vehicle type
+        updateBrandDropdown(selectedVehicleType);
+    });
+
+    // Function to update the model dropdown based on the selected brand name and vehicle type
+    function updateModelDropdown(brandName) {
+        selectedBrandName = brandName;
+        if (!selectedVehicleType) {
+            console.error("Vehicle type not selected."); // Handle the case where vehicle type is not selected
+            return;
+        }
+        $.ajax({
+            url: "/user/retrieve-model/" + brandName + "/" + selectedVehicleType, // Include the selected vehicle type in the URL
+            method: "GET",
+            dataType: "json",
+            success: function(models) {
+                $("#modelName").empty(); // Clear existing options
+                $("#modelName").append("<option value=''>Select Model Name</option>");
+                $.each(models, function(index, model) {
+                    $("#modelName").append("<option value='" + model.modelName + "'>" + model.modelName + "</option>");
+                });
+            },
+            error: function(error) {
+                console.error("Error fetching models:", error);
+            }
+        });
+    }
+
+
+    // Function to update model details based on the selected model name
+    function updateModelDetails(modelName) {
+        $.ajax({
+            url: "/user/retrieve-model-details/" + selectedBrandName + "/" + selectedVehicleType + "/" + modelName,
+            method: "GET",
+            dataType: "json",
+            success: function(modelDetails) {
+                $("#modelType").val(modelDetails.modelType);
+                $("#seatingCapacity").val(modelDetails.seatingCapacity);
+            },
+            error: function(error) {
+                console.error("Error fetching model details:", error);
+            }
+        });
+    }
+
+    // Event listener for radio buttons to update brand dropdown when vehicle type changes
+    $("input[type='radio'][name='vehicleType']").change(function() {
+        var selectedVehicleType = $(this).val();
+        updateBrandDropdown(selectedVehicleType);
+    });
+
+    // Event listener for brand dropdown to update model dropdown when brand name changes
+    $("#brandName").change(function() {
+        var selectedBrandName = $(this).val();
+        updateModelDropdown(selectedBrandName);
+    });
+
+    // Event listener for model dropdown to update model details when model name changes
+    $("#modelName").change(function() {
+        var selectedModelName = $(this).val();
+        updateModelDetails(selectedModelName);
+    });
+</script>
+
+</body>
+</html>
+

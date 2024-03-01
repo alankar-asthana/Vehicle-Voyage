@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::section})}"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>VehicleVoyage-Home</title>
+</head>
+<body>
+    <section>
+        <!-- Banner -->
+        <div class="banner d-flex mt-5 justify-content-center">
+            <div class="text-center mt-5 ml-2">
+                <h1 style="color: black;">!!The world on your wheels!! Explore confidently, connect effortlessly with Vehicle Voyage.</h1>
+                <p class="p-5">
+                    <a class="btn bg-primary btn-lg text-white" th:href="@{/login}" role="button">Login</a>
+                </p>
+            </div>
+            <div class="images d-flex p-3">
+                <img src="../images/bike_rent.jpg" alt="Bike Rent" style=" border-radius: 145px; height: 300px; width: 300px; padding: 10px; box-shadow: 10px 10px 5px #aaaaaa" class="img1">
+                <img src="../images/car_rent.jpg" alt="Car Rent" style=" border-radius: 145px; height: 300px; width: 300px; padding: 10px; box-shadow: 10px 10px 5px #aaaaaa" class="img2">
+                <img src="../images/key_rent.jpg" alt="Key Rent" style=" border-radius: 145px; height: 300px; width: 300px; padding: 10px; box-shadow: 10px 10px 5px #aaaaaa">
+            </div>
+        </div>
+
+<!--        <div class="slideshow-controls d-flex justify-content-around mt-5">-->
+<!--            <button class="prev"><i class="fas fa-chevron-left"></i></button>-->
+<!--            <button class="next"><i class="fas fa-chevron-right"></i></button>-->
+<!--        </div>-->
+
+        <!-- Search Bar -->
+        <div class="search-bar d-flex justify-content-center align-items-center bg-dark text-white p-4 mt-3">
+            <h2 class="p-5">Search Vehicles</h2>
+            <form class="form-inline">
+                <div class="dropdown">
+                    <select class="form-select country" aria-label="Default select example" onchange="loadStates()">
+                        <option selected>Select Country</option>
+                    </select>
+                    <select class="form-select state" aria-label="Default select example" onchange="loadCities()">
+                        <option selected>Select State</option>
+                    </select>
+                    <select class="form-select city" aria-label="Default select example">
+                        <option selected>Select City</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary ml-2">Search</button>
+            </form>
+        </div>
+
+        <!-- About Section -->
+        <div class="about-section">
+            <h2 class="text-center">About Vehicle Voyage</h2>
+            <p>Welcome to Vehicle Voyage, where convenience meets mobility. Our mission is to revolutionize the way you explore and travel,
+                providing a hassle-free and seamless vehicle rental experience especially during relocations for work, study, or other purposes.
+                At Vehicle Voyage, we understand the importance of flexibility and accessibility in today's fast-paced world. That's why we
+                offer on-the-go rentals, allowing you to rent a vehicle anytime, anywhere, with our user-friendly app. Whether you need
+                a car for a weekend getaway or a moving van for a cross-country relocation, we've got you covered.
+                Our commitment to global accessibility sets us apart. We support individuals in their migration and ensure they experience
+                the ease of travel with multilingual support, making Vehicle Voyage a global companion for all your transportation needs.
+            </p>
+            <p><strong>Key Features:</strong></p>
+            <ul>
+                <li><strong>On-the-Go Rentals:</strong> Rent a vehicle anytime, anywhere, with our user-friendly app.</li>
+                <li><strong>Global Accessibility:</strong> Supporting individuals in their migration and experience the ease of
+                    travel with multilingual support, making Vehicle Voyage a global companion.</li>
+            </ul>
+        </div>
+
+        <h2 style="text-align:center">Our Team</h2>
+        <div class="container">
+            <div class="row">
+                    <div class="team d-flex">
+                        <div class="column">
+                            <div class="card mb-3">
+                                <img th:src="@{images/Passport Pic.jpg}" alt="Jane" style="width:100%;">
+                                <div class="container">
+                                    <h2>Jane Doe</h2>
+                                    <p class="title">CEO & Founder</p>
+                                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                                    <p>jane@example.com</p>
+                                    <p><button class="button">Contact</button></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="card mb-3">
+                                <img th:src="@{images/Passport Pic.jpg}" alt="Mike" style="width:100%;">
+                                <div class="container">
+                                    <h2>Mike Ross</h2>
+                                    <p class="title">Art Director</p>
+                                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                                    <p>mike@example.com</p>
+                                    <p><button class="button">Contact</button></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="card mb-3">
+                                <img th:src="@{images/Passport Pic.jpg}" alt="John" style="width:100%;">
+                                <div class="container">
+                                    <h2>John Doe</h2>
+                                    <p class="title">Designer</p>
+                                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                                    <p>john@example.com</p>
+                                    <p><button class="button">Contact</button></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <!-- Testimonials Section -->
+        <div class="container mt-5" id="testimonials">
+            <h2 class="text-center">Testimonials</h2>
+
+            <!-- Blogs -->
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Blogs</h3>
+                    <p class="card-text">"I recently used Vehicle Voyage for a road trip with my friends, and it was fantastic! The booking process was seamless, and the vehicle was in great condition. Highly recommend!" - Sarah</p>
+                </div>
+            </div>
+
+            <!-- Articles -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">Articles</h3>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="card-link">"The Ultimate Guide to Car Rental: How to Choose the Right Vehicle for Your Needs and Budget"</a></li>
+                        <li><a href="#" class="card-link">"Exploring the World with Vehicle Voyage: A Comprehensive Review" - Travel Magazine</a></li>
+                        <li><a href="#" class="card-link">"How Vehicle Voyage is Changing the Game in the Rental Industry" - Business Insider</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Feedbacks -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h3 class="card-title">Feedbacks</h3>
+                    <p class="card-text">"Amazing service. I highly recommend Vehicle Voyage for my next trip. Thank you!" - John</p>
+                    <p class="card-text">"I had a wonderful experience using Vehicle Voyage. The booking process was quick and easy. The vehicle was in great condition. I highly recommend it!" - Mary</p>
+                    <p class="card-text">"I really appreciate the on-the-go vehicle rental option. The booking process was straightforward, and they were seamless for me. I'll definitely be using Vehicle Voyage again in the future." - Michael</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Contact Section -->
+        <div class="mt-5 p-5 bg-dark text-white">
+            <div class="row d-flex justify-content-between align-items-center">
+                <div class="box contact" id="contact-us">
+                    <h4>Contact US</h4>
+                    <p>Email: support@vehiclevoyage.rentals</p>
+                    <p>Contact No.: +91-6393776262</p>
+                </div>
+                <div class="box quick-links">
+                    <h3>quick links</h3>
+                    <a class="text-white" href="#home"> <i class="fas fa-chevron-right"></i> Home </a><br>
+                    <a class="text-white" href="#about-us"> <i class="fas fa-chevron-right"></i> About </a><br>
+                    <a class="text-white" th:href="@{/book-vehicle}"> <i class="fas fa-chevron-right"></i> Book Vehicle </a>
+                </div>
+                <div class="box follow">
+                    <h3>follow us</h3>
+                    <a class="text-white" href="#"> <i class="fab fa-twitter"></i> twitter </a><br>
+                    <a class="text-white" href="#"> <i class="fab fa-instagram"></i> instagram </a><br>
+                    <a class="text-white" href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</body>
+</html>

@@ -1,0 +1,53 @@
+/* Styling of Sidebar */
+.sidebar{
+    width: 18%;
+    height: 100%
+    position: fixed;
+    z-index: 999999999999999999999999999999999999999999999999999;
+}
+
+.sidebar a{
+    display: block;
+    width: 100%
+}
+
+
+.sidebar .divider{
+    height: .5px;
+    width: 100%;
+    background: #e2e2e2;
+    margin-top: 10%;
+}
+.content{
+    margin-left: 0%;
+    width: 100%
+}
+
+@media only screen and (max-width: 600px){
+    .sidebar{
+        display: none;
+        width: 80% !important;
+        background: white;
+        height: 100vh;
+        position: fixed;
+        padding-top: 20px
+        z-index: 99999;
+    }
+    .content{
+        margin-left: 0%! important;
+    }
+}
+
+
+/* CSS for resizing images */
+.resize-image {
+    width: 180px; /* Set desired width */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 200px; /* Set maximum height to prevent stretching */
+}
+
+/* CSS for zooming functionality */
+.resize-image:hover {
+    transform: scale(1.1); /* Zoom in on hover */
+    transition: transform 0.3s ease; /* Add transition effect */
+}

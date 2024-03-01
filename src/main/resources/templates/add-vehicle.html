@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vehicle-VehicleVoyage</title>
+</head>
+<body>
+<section>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="my-card p-3 shadow-lg">
+                    <H1 class="text-center">Add Vehicle</H1>
+                    <!-- Alert  message for success and failure -->
+                    <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
+                        <span class="text-center" th:text="${message.text}"></span>
+                    </div>
+                    <form action="#" th:action="@{/user/save_vehicle}" th:object="${vehicle}" method="post" enctype="multipart/form-data">
+                        <!-- vehicle type radio buttons of car and bike -->
+                        <div class="form-group p-2 d-flex">
+                            <label>Vehicle Type</label>
+                            <div class="form-check form-check-inline pl-3">
+                                <input class="form-check-input" type="radio" name="vehicleType" id="carType" value="Car" required onclick="updateBrandDropdown('Car')">
+                                <label class="form-check-label" for="carType">Car</label>
+                            </div>
+                            <div class="form-check form-check-inline pl-3">
+                                <input class="form-check-input" type="radio" name="vehicleType" id="bikeType" value="Bike" required onclick="updateBrandDropdown('Bike')">
+                                <label class="form-check-label" for="bikeType">Bike</label>
+                            </div>
+                        </div>
+                        <!-- brand name dropdown -->
+                        <!-- fetch brands from database brand_details on the basis of vehicle type-->
+                        <div class="form-group p-2">
+                            <label for="brandName">Brand Name</label>
+                            <select name="brandName" id="brandName" class="form-control" required onchange="updateModelDropdown(this.value)">
+                                <option value="">Select Brand Name</option>
+                            </select>
+                        </div>
+                        <div th:each="e: ${#fields.errors('brandName')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- model name dropdown -->
+                        <!-- fetch models from database brand_details on the basis of brand name and vehicle type-->
+                        <div class="form-group p-2">
+                            <label for="modelName">Model Name</label>
+                            <select name="modelName" id="modelName" class="form-control" onchange="updateModelDetails(this.value)">
+                                <option value="">Select Model Name</option>
+                            </select>
+                        </div>
+                        <div th:each="e: ${#fields.errors('modelName')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- model type field -->
+                        <!-- input model type from database brand_details on the basis of model name-->
+                        <div class="form-group p-2">
+                            <label for="modelType">Model Type</label>
+                            <input type="text" name="modelType" id="modelType" class="form-control"
+                                   th:classappend="${#fields.hasErrors('modelType')?'is-invalid' : ''}"
+                                   placeholder="Enter vehicle model type" required
+                                   th:value="${vehicle.modelType}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('modelType')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- Seating Capacity -->
+                        <!-- input seating capacity from database brand_details on the basis of model name-->
+                        <div class="form-group p-2">
+                            <label for="seatingCapacity">Seating Capacity</label>
+                            <input type="number" name="seatingCapacity" id="seatingCapacity" class="form-control"
+                                   th:classappend="${#fields.hasErrors('seatingCapacity')?'is-invalid' : ''}"
+                                   placeholder="Enter vehicle seating capacity" required
+                                   th:value="${vehicle.seatingCapacity}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('seatingCapacity')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- registration number field -->
+                        <div class="form-group p-2">
+                            <label for="registrationNumber">Registration Number</label>
+                            <input type="text" name="registrationNumber" id="registrationNumber" class="form-control"
+                                   th:classappend="${#fields.hasErrors('registrationNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter vehicle registration number" required
+                                   th:value="${vehicle.registrationNumber}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('registrationNumber')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- mileage field -->
+                        <div class="form-group p-2">
+                            <label for="mileage">Mileage</label>
+                            <input type="number" name="mileage" id="mileage" class="form-control"
+                                   th:classappend="${#fields.hasErrors('mileage')?'is-invalid' : ''}"
+                                   placeholder="Enter vehicle mileage" required
+                                   th:value="${vehicle.mileage}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('mileage')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- fuel type field -->
+                        <div class="form-group p-2">
+                            <label for="fuelType">Fuel Type</label>
+                            <select name="fuelType" id="fuelType" class="form-control">
+                                <option value="">Select Fuel Type</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="CNG">CNG</option>
+                                <option value="Electric">Electric</option>
+                                <option value="Hybrid">Hybrid</option>
+                                <option value="LPG">LPG</option>
+                            </select>
+                        </div>
+                        <div th:each="e: ${#fields.errors('fuelType')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- engineCC field -->
+                        <div class="form-group p-2">
+                            <label for="engineCC">EngineCC</label>
+                            <input type="number" name="engineCC" id="engineCC" class="form-control"
+                                   th:classappend="${#fields.hasErrors('engineCC')?'is-invalid' : ''}"
+                                   placeholder="Enter your name" required
+                                   th:value="${vehicle.engineCC}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('engineCC')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- transmissionType dropdown- Manual Transmission(MT), Intelligent manual transmission (IMT), Automated manual transmission (AMT), Automatic transmission (AT)
+                             Continuously variable transmission (CVT), Semi-automatic transmission (SMT), Dual-clutch transmission(DCT),Sequential transmission (ST), Torque converter transmission (TCT), Tiptronic transmission -->
+                        <!-- It will be visible only if the vehicle type is car -->
+                        <div class="form-group p-2">
+                            <label for="transmissionType">Transmission Type</label>
+                            <select name="transmissionType" id="transmissionType" class="form-control">
+                                <option value="">Select Transmission Type</option>
+                                <option value="Manual Transmission(MT)">Manual Transmission(MT)</option>
+                                <option value="Intelligent manual transmission (IMT)">Intelligent manual transmission (IMT)</option>
+                                <option value="Automated manual transmission (AMT)">Automated manual transmission (AMT)</option>
+                                <option value="Automatic transmission (AT)">Automatic transmission (AT)</option>
+                                <option value="Continuously variable transmission (CVT)">Continuously variable transmission (CVT)</option>
+                                <option value="Semi-automatic transmission (SMT)">Semi-automatic transmission (SMT)</option>
+                                <option value="Dual-clutch transmission(DCT)">Dual-clutch transmission(DCT)</option>
+                                <option value="Sequential transmission (ST)">Sequential transmission (ST)</option>
+                                <option value="Torque converter transmission (TCT)">Torque converter transmission (TCT)</option>
+                                <option value="Tiptronic transmission">Tiptronic transmission</option>
+                            </select>
+                        </div>
+
+                        <!-- Registration Date -->
+                        <div class="form-group p-2">
+                            <label for="registrationDate">Registration Date</label>
+                            <input type="date" name="registrationDate" id="registrationDate" class="form-control"
+                                   th:classappend="${#fields.hasErrors('registrationDate')?'is-invalid' : ''}"
+                                   placeholder="Enter registration date" required
+                                   th:value="${vehicle.registrationDate}" />
+                        <div th:each="e: ${#fields.errors('registrationDate')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- OwnerAadharNumber Field -->
+                        <div class="form-group p-2">
+                            <label for="ownerAadharNumber">Owner Aadhar Number</label>
+                            <input type="number" name="ownerAadharNumber" id="ownerAadharNumber" class="form-control"
+                                   th:classappend="${#fields.hasErrors('ownerAadharNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your aadhar number" required
+                                   th:value="${vehicle.ownerAadharNumber}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('ownerAadharNumber')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- OwnerContactNumber -->
+                        <div class="form-group p-2">
+                            <label for="ownerContactNumber">Owner Contact Number</label>
+                            <input type="number" name="ownerContactNumber" id="ownerContactNumber" class="form-control"
+                                   th:classappend="${#fields.hasErrors('ownerContactNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your contact number" required
+                                   th:value="${vehicle.ownerContactNumber}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('ownerContactNumber')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- houseNumber_shopNumber -->
+                        <div class="form-group p-2">
+                            <label for="houseNumber_shopNumber">House Number/Shop Number</label>
+                            <input type="text" name="houseNumber_shopNumber" id="houseNumber_shopNumber" class="form-control"
+                                   th:classappend="${#fields.hasErrors('houseNumber_shopNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your house number/shop number" required
+                                   th:value="${vehicle.houseNumber_shopNumber}"/>
+                        </div>
+
+                        <!-- streetName_streetNumber -->
+                        <div class="form-group p-2">
+                            <label for="streetName_streetNumber">Street Name/Street Number</label>
+                            <input type="text" name="streetName_streetNumber" id="streetName_streetNumber" class="form-control"
+                                   th:classappend="${#fields.hasErrors('streetName_streetNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your street name/street number"
+                                   th:value="${vehicle.streetName_streetNumber}"/>
+                        </div>
+                        <!-- colony -->
+                        <div class="form-group p-2">
+                            <label for="colony">Colony</label>
+                            <input type="text" name="colony" id="colony" class="form-control"
+                                   th:classappend="${#fields.hasErrors('colony')?'is-invalid' : ''}"
+                                   placeholder="Enter your colony" required
+                                   th:value="${vehicle.colony}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('colony')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- Country, State, City dropdown -->
+                        <div class="d-flex">
+                            <!-- Country dropdown -->
+                            <div class="form-group p-2">
+                                <label for="country">Country</label>
+                                <select class="form-control country" name="country" id="country" required onchange="loadStates()">
+                                    <option selected>Select Country</option>
+                                </select>
+                            </div>
+                            <div th:each="e: ${#fields.errors('country')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                            <!-- State dropdown -->
+                            <div class="form-group p-2">
+                                <label for="state">State</label>
+                                <select class="form-control state" name="state" id="state" required onchange="loadCities()">
+                                    <option selected>Select State</option>
+                                </select>
+                            </div>
+                            <div th:each="e: ${#fields.errors('state')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                            <!-- City dropdown -->
+                            <div class="form-group p-2">
+                                <label for="city">City</label>
+                                <select class="form-control city" name="city" id="city" required>
+                                    <option selected>Select City</option>
+                                </select>
+                            </div>
+                            <div th:each="e: ${#fields.errors('city')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        </div>
+                        <!-- pincode -->
+                        <div class="form-group p-2">
+                            <label for="pincode">Pincode</label>
+                            <input type="number" name="pincode" id="pincode" class="form-control"
+                                   th:classappend="${#fields.hasErrors('pincode')?'is-invalid' : ''}"
+                                   placeholder="Enter your area pincode" required
+                                   th:value="${vehicle.pincode}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('pincode')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- Image Uploading Field:registrationCertificate, frontViewimage, backViewimage, leftViewimage, rightViewimage -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h4>Upload Below Required Files</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group p-2">
+                                    <label for="registrationCertificateimage">Registration Certificate:</label>
+                                    <input type="file" name="registrationCertificate" id="registrationCertificateimage" class="form-control-file"/>
+                                </div>
+
+                                <div class="form-group p-2">
+                                    <label for="frontViewimage">Front View Image:</label>
+                                    <input type="file" name="frontView" id="frontViewimage" class="form-control-file" accept="image/*"/>
+                                </div>
+
+                                <div class="form-group p-2">
+                                    <label for="backViewimage">Back View Image:</label>
+                                    <input type="file" name="backView" id="backViewimage" class="form-control-file" accept="image/*"/>
+                                </div>
+
+                                <div class="form-group p-2">
+                                    <label for="leftViewimage">Left View Image:</label>
+                                    <input type="file" name="leftView" id="leftViewimage" class="form-control-file" accept="image/*"/>
+                                </div>
+
+                                <div class="form-group p-2">
+                                    <label for="rightViewimage">Right View Image:</label>
+                                    <input type="file" name="rightView" id="rightViewimage" class="form-control-file" accept="image/*"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- success/alert message -->
+                        <div th:if="${message}" th:classappend="${message.type}" role="alert">
+                            <!-- Display the Message -->
+                            <p class="text-center" th:text="${message.text}"></p>
+                        </div>
+
+                        <!-- submit button -->
+                        <div class="form-group p-2">
+                            <button type="submit" class="btn btn-primary btn-block">Add Vehicle</button>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</section>
+</body>
+</html>

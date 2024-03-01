@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{base :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Register - Vehicle Voyage</title>
+</head>
+<body>
+<section>
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-md-6 offset-md-3">
+                <div class="my-card p-3 shadow-lg">
+                    <H1 class="text-center">Register Here!!</H1>
+                    <form action="#" th:action="@{/registration}" th:object="${user}" method="post">
+                        <!-- firstname field -->
+                        <div class="form-group p-2">
+                            <label for="firstName">First Name</label>
+                            <input type="text"
+                                   name="firstName"
+                                   id="firstName"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('firstName')?'is-invalid' : ''}"
+                                   placeholder="Enter your name"
+                                   required
+                                   th:value="${user.firstName}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('firstName')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- lastname field -->
+                        <div class="form-group p-2">
+                            <label for="lastName">Last Name</label>
+                            <input type="text"
+                                   name="lastName"
+                                   id="lastName"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('lastName')?'is-invalid' : ''}"
+                                   placeholder="Enter your name"
+                                   required
+                                   th:value="${user.lastName}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('lastName')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- email field -->
+                        <div class="form-group p-2">
+                            <label for="email_field">Your Email</label>
+                            <input type="email"
+                                   name="email"
+                                   id="email_field"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('email')?'is-invalid' : ''}"
+                                   placeholder="Enter your email"
+                                   required
+                                   th:value="${user.email}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('email')}" th:text="${e}" class="invalid-feedback d-block"></div>
+                        <!-- contact number field -->
+                        <div class="form-group p-2">
+                            <label for="contactNumber">Contact Number</label>
+                            <input type="number"
+                                   name="contactNumber"
+                                   id="contactNumber"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('contactNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your contact number"
+                                   required
+                                   min="1000000000"
+                                   max="9999999999"
+                                   th:value="${user.contactNumber}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('contactNumber')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- aadhar number field -->
+                        <div class="form-group p-2">
+                            <label for="aadharNumber">Aadhar Number</label>
+                            <input type="number"
+                                   name="aadharNumber"
+                                   id="aadharNumber"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('aadharNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your aadhar number"
+                                   required
+                                   th:value="${user.aadharNumber}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('aadharNumber')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- license number field -->
+                        <div class="form-group p-2">
+                            <label for="licenseNumber">License Number</label>
+                            <input type="text"
+                                   name="licenseNumber"
+                                   id="licenseNumber"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('licenseNumber')?'is-invalid' : ''}"
+                                   placeholder="Enter your license number"
+                                   required
+                                   th:value="${user.licenseNumber}"/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('licenseNumber')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- password field -->
+                        <div class="form-group p-2">
+                            <label for="password_field">Your Password</label>
+                            <input type="password"
+                                   name="password"
+                                   id="password_field"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('password')?'is-invalid' : ''}"
+                                   placeholder="Enter your password"
+                                   required/>
+                        </div>
+                        <div th:each="e: ${#fields.errors('password')}" th:text="${e}" class="invalid-feedback d-block"></div>
+
+                        <!-- Terms and Conditions Agreement -->
+                        <div class="form-group form-check">
+                            <input type="checkbox"
+                                   name="agreement"
+                                   class="form-check-input"
+                                   id="agreement"/>
+                            <label for="agreement" class="form-check-label">Accept terms and conditions</label>
+                        </div>
+
+                        <div th:if="${message}" th:classappend="${message.type}" role="alert">
+                            <!-- Display the Message -->
+                            <p class="text-center" th:text="${message.text}"></p>
+                        </div>
+                        <!-- submit button -->
+                        <div class="container text-center p-2">
+                            <button type="submit" class="btn bg-primary text-white">
+                                Submit
+                            </button>
+                            <button type="reset" class="btn btn-danger text-white">
+                                Reset
+                            </button>
+                            <a th:href="@{/login}" class="btn btn-primary">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

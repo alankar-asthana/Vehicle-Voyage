@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard-VehicleVoyage</title>
+</head>
+<body>
+<section>
+    <h2 class="text-center" style="font-weight: bold">Welcome <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span></h2>
+    <!-- Display User Profile -->
+    <div class="container mt-5">
+        <h3 style="font-weight: bold">Personal Details</h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="my-card">
+                    <table class="table w-100 table-borderless">
+                        <tbody>
+                        <tr>
+                            <th scope="row">First Name:</th>
+                            <td th:text="${user.firstName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Last Name:</th>
+                            <td th:text="${user.lastName}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Email:</th>
+                            <td th:text="${user.email}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Contact Number:</th>
+                            <td th:text="${user.contactNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Aadhar Number:</th>
+                            <td th:text="${user.aadharNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">License Number:</th>
+                            <td th:text="${user.licenseNumber}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display User Vehicles -->
+    <div class="container">
+        <h3 style="font-weight: bold">Owned Vehicles</h3>
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col-md-4 col-sm-6 mb-4" th:each="vehicle : ${vehicles}">
+                <a th:href="@{/user/vehicle-details/__${vehicle.registrationNumber}__}">
+                    <div class="vehicle-card p-3">
+                        <img th:src="@{../images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
+                        <div class="card-body">
+                            <h5 th:text="${vehicle.brandName}+'  '+ ${vehicle.modelName}"></h5>
+                            <p th:text="${vehicle.vehicleType}"></p>
+                            <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

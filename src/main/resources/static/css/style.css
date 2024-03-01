@@ -1,0 +1,97 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  /*padding: 0 8px;*/
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  background-color: white;
+  color: black;
+}
+
+.title {
+  color: grey;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+.box a {
+    color: white;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.box a i {
+    padding-right: .5rem;
+    color: #fff;
+}
+
+.box a:hover i {
+    padding-right: 2rem;
+}
+
+/* Reset basic styles for mobile responsiveness */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Default styles for the slideshow */
+.banner {
+  height: fit-content;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  margin: 10px auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+    .images img:nth-child(1),
+    .images img:nth-child(2) {
+        display: none;
+    }
+    .banner {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .team {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .team .column {
+        justify-content: center;
+        width: 100%;
+    }
+}
