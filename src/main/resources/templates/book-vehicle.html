@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section>
+    <!-- Search Bar -->
+    <div class="search-bar d-flex justify-content-center align-items-center bg-dark text-white p-4 mt-3">
+        <h2 class="p-5">Search Vehicles</h2>
+        <form class="form-inline" th:action="@{/user/vehicle-booking/{city}(city=${city})}" method="get">
+            <div class="dropdown">
+                <select class="form-select country" aria-label="Default select example" onchange="loadStates()">
+                    <option selected>Select Country</option>
+                </select>
+                <select class="form-select state" aria-label="Default select example" onchange="loadCities()">
+                    <option selected>Select State</option>
+                </select>
+                <select class="form-select city" aria-label="Default select example">
+                    <option selected>Select City</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Search</button>
+        </form>
+    </div>
+    <!-- Display available vehicles -->
+    <div class="container">
+        <h3 style="font-weight: bold">Book a vehicle on your way</h3>
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col-md-4 col-sm-6 mb-4" th:each="vehicle : ${vehicles}">
+                <a th:href="@{/user/vehicle-details/__${vehicle.registrationNumber}__}">
+                    <div class="vehicle-card p-3">
+                        <img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
+                        <div class="card-body">
+                            <h5 th:text="${vehicle.brandName}+'  '+ ${vehicle.modelName}"></h5>
+                            <p th:text="${vehicle.vehicleType}"></p>
+                            <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Get the user's current city and fetch available vehicles
+        function getAndFetchVehiclesByCity() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showCityAndFetchVehicles);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showCityAndFetchVehicles(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Make a request to a Geocoding API to get the city name
+            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`;
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                    // Parse the city name from the API response
+                    const city = data.results[0].address_components.find((component) =>
+                        component.types.includes("locality")
+                    ).long_name;
+
+                    console.log(`Your city is ${city}.`);
+                    if (city) {
+                        const vehicleFetchUrl = `/user/vehicle-booking/${city}`;
+                        window.location.href = vehicleFetchUrl; // Redirect to fetch vehicles by city
+                    }
+                })
+                .catch((error) => console.log(error));
+        }
+
+        // Load the user's current city and fetch vehicles when the page is loaded
+        window.onload = function () {
+            getAndFetchVehiclesByCity();
+            loadCountries(); // You may also want to load countries and states if needed
+        };
+
+    </script>
+</section>
+</body>
+</html>

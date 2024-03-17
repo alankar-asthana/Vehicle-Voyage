@@ -42,10 +42,10 @@
                         <!-- Input fields for updating vehicle details -->
                         <h3 class="mt-5" style="font-weight: bold">Update Details</h3>
 
-                        <form th:action="@{/user/update-vehicle-details}" method="post">
+                        <form th:action="@{/user/update-vehicle-details}" method="post" enctype="multipart/form-data">
 
                             <!-- Hidden input field for vehicle id -->
-                            <input type="hidden" name="vehicleId" th:value="${vehicle.id}">
+                            <input type="hidden" name="id" th:value="${vehicle.id}">
 
                             <!-- Update seating capacity -->
                             <div class="form-group">

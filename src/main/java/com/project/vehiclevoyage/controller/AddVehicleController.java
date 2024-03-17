@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +23,6 @@ import java.util.UUID;
 import static com.project.vehiclevoyage.helper.ImageUploadHelper.UPLOAD_DIR;
 
 @Controller
-@RequestMapping("/user/save_vehicle")
 public class AddVehicleController {
     @Autowired
     VehicleRepository vehicleRepository;
@@ -38,7 +34,17 @@ public class AddVehicleController {
 
     User user;
 
-    @PostMapping
+
+    @GetMapping("/user/add-vehicle-form")
+    public String registerVehicle (Model model, Principal principal) {
+        user = (User) userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("title", "Add Vehicle-VehicleVoyage");
+        model.addAttribute("user", user);
+        model.addAttribute("vehicle", new Vehicle());
+        return "add-vehicle";
+    }
+
+    @PostMapping("/user/save_vehicle")
     public String saveVehicle(@ModelAttribute @Valid Vehicle vehicle, BindingResult bindingResult, Model model,
                               HttpSession session, Principal principal,
                               @RequestParam("registrationCertificate") MultipartFile file1,

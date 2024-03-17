@@ -10,20 +10,27 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class VehicleService {
+public class VehicleService{
 
     @Autowired
     private VehicleRepository vehicleRepository;
 
     public List<Vehicle> getVehiclesByUserId(User user) {
+
         return vehicleRepository.findByOwner_Id(user.getId());
     }
 
     public Optional<Vehicle> getVehicleById(String id) {
+
         return vehicleRepository.findById(id);
     }
 
     public Vehicle getVehicleByRegistrationNumber(String registrationNumber) {
         return vehicleRepository.findByRegistrationNumber(registrationNumber);
+    }
+
+    public List<Vehicle> getVehicleByCity(String city) {
+
+        return vehicleRepository.findByCity(city);
     }
 }

@@ -53,7 +53,7 @@
             <div class="col-md-4 col-sm-6 mb-4" th:each="vehicle : ${vehicles}">
                 <a th:href="@{/user/vehicle-details/__${vehicle.registrationNumber}__}">
                     <div class="vehicle-card p-3">
-                        <img th:src="@{../images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
+                        <img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
                         <div class="card-body">
                             <h5 th:text="${vehicle.brandName}+'  '+ ${vehicle.modelName}"></h5>
                             <p th:text="${vehicle.vehicleType}"></p>

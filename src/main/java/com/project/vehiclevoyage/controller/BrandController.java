@@ -32,14 +32,6 @@ public class BrandController {
     }
 
 
-    @GetMapping("/user/add-vehicle-form")
-    public String registerVehicle (org.springframework.ui.Model model){
-        model.addAttribute("title", "Add Vehicle-VehicleVoyage");
-        model.addAttribute("vehicle", new Vehicle());
-        return "add-vehicle";
-    }
-
-
     //Retrieve all brands by vehicle type
     @GetMapping("/user/retrieve-brand/{vehicleType}")
     public ResponseEntity<List<Brands>> retrieveBrand(@PathVariable String vehicleType) {
