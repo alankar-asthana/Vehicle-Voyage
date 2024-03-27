@@ -6,10 +6,11 @@
 </head>
 <body>
 <section>
+    <h1 class ="text-center" style="font-weight: bold">Book a vehicle on your way</h1>
     <!-- Search Bar -->
-    <div class="search-bar d-flex justify-content-center align-items-center bg-dark text-white p-4 mt-3">
-        <h2 class="p-5">Search Vehicles</h2>
-        <form class="form-inline" th:action="@{/user/vehicle-booking/{city}(city=${city})}" method="get">
+    <div class="search-bar d-flex justify-content-center align-items-center">
+        <h2 class="p-5" style="font-weight: bold">Search Vehicles</h2>
+        <form class="form-inline" id= "searchForm" th:action="@{/user/available_vehicles}" method="post">
             <div class="dropdown">
                 <select class="form-select country" aria-label="Default select example" onchange="loadStates()">
                     <option selected>Select Country</option>
@@ -17,16 +18,57 @@
                 <select class="form-select state" aria-label="Default select example" onchange="loadCities()">
                     <option selected>Select State</option>
                 </select>
-                <select class="form-select city" aria-label="Default select example">
+                <select class="form-select city" aria-label="Default select example" name="city">
                     <option selected>Select City</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary ml-2">Search</button>
+            <!-- vehicle type radio buttons of car and bike -->
+            <div class="form-group p-2 d-flex">
+                <label>Vehicle Type</label>
+                <div class="form-check form-check-inline pl-3">
+                    <input class="form-check-input" type="radio" name="vehicleType" id="carType" value="Car" required onclick="updateBrandDropdown('Car')">
+                    <label class="form-check-label" for="carType">Car</label>
+                </div>
+                <div class="form-check form-check-inline pl-3">
+                    <input class="form-check-input" type="radio" name="vehicleType" id="bikeType" value="Bike" required onclick="updateBrandDropdown('Bike')">
+                    <label class="form-check-label" for="bikeType">Bike</label>
+                </div>
+            </div>
+            <!-- Daily, weekly, monthly radio buttons -->
+            <div class="form-group p-2" id="bookingType">
+                <label for="bookingType">Booking Type</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="bookingType" id="daily" value="Daily" required>
+                    <label class="form-check-label" for="daily">Daily</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="bookingType" id="weekly" value="Weekly">
+                    <label class="form-check-label" for="weekly">Weekly</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="bookingType" id="monthly" value="Monthly">
+                    <label class="form-check-label" for="monthly">Monthly</label>
+                </div>
+            </div>
+            <!-- Hidden fields for days, weeks and months-->
+            <input type="hidden" id="days" name="days" placeholder="Enter number of days">
+            <input type="hidden" id="weeks" name="weeks" placeholder="Enter number of weeks">
+            <input type="hidden" id="months" name="months" placeholder="Enter number of months">
+            <!-- calendar -->
+            <div class="form-group p-2">
+                <label for="date">Pickup Date</label>
+                <input type="date" name="startDate" id="date" class="form-control" required>
+            </div>
+            <!-- search button -->
+            <button type="submit" class="btn btn-primary ml-2" onclick="searchVehicles()">Search</button>
         </form>
+    </div>
+    <!-- Display error message if no vehicles are available -->
+    <div th:if="${message}" th:classappend="${message.type}" class="alert" role="alert">
+        <span class="text-center" th:text="${message.text}"></span>
     </div>
     <!-- Display available vehicles -->
     <div class="container">
-        <h3 style="font-weight: bold">Book a vehicle on your way</h3>
         <div class="row row-cols-1 row-cols-md-3">
             <div class="col-md-4 col-sm-6 mb-4" th:each="vehicle : ${vehicles}">
                 <a th:href="@{/user/vehicle-details/__${vehicle.registrationNumber}__}">
@@ -36,53 +78,29 @@
                             <h5 th:text="${vehicle.brandName}+'  '+ ${vehicle.modelName}"></h5>
                             <p th:text="${vehicle.vehicleType}"></p>
                             <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
+                            <a class="btn btn-primary book-btn">Book</a>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
     </div>
-    <script>
-        // Get the user's current city and fetch available vehicles
-        function getAndFetchVehiclesByCity() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showCityAndFetchVehicles);
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
-        }
-
-        function showCityAndFetchVehicles(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            // Make a request to a Geocoding API to get the city name
-            const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`;
-
-            fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
-                    // Parse the city name from the API response
-                    const city = data.results[0].address_components.find((component) =>
-                        component.types.includes("locality")
-                    ).long_name;
-
-                    console.log(`Your city is ${city}.`);
-                    if (city) {
-                        const vehicleFetchUrl = `/user/vehicle-booking/${city}`;
-                        window.location.href = vehicleFetchUrl; // Redirect to fetch vehicles by city
-                    }
-                })
-                .catch((error) => console.log(error));
-        }
-
-        // Load the user's current city and fetch vehicles when the page is loaded
-        window.onload = function () {
-            getAndFetchVehiclesByCity();
-            loadCountries(); // You may also want to load countries and states if needed
-        };
-
-    </script>
 </section>
 </body>
 </html>
+
+<!--<script>-->
+<!--    document.getElementById('searchForm').addEventListener('submit', function(e) {-->
+<!--        e.preventDefault(); // Prevent the default form submission-->
+
+<!--        const citySelect = document.querySelector('.city');-->
+<!--        const selectedCity = citySelect.value;-->
+
+<!--        // Set the actual URL with the selected city-->
+<!--        const formAction = `/user/vehicle-booking/`+selectedCity;-->
+<!--        this.action = formAction;-->
+
+<!--        // Submit the form-->
+<!--        this.submit();-->
+<!--    });-->
+<!--</script>-->

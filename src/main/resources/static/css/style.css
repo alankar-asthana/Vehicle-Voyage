@@ -95,3 +95,9 @@ body {
         width: 100%;
     }
 }
+
+.book-btn:focus,
+.book-btn:hover {
+    background-color: #212529;
+    color: #fff;
+}
