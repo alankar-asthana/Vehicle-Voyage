@@ -71,14 +71,18 @@
     <div class="container">
         <div class="row row-cols-1 row-cols-md-3">
             <div class="col-md-4 col-sm-6 mb-4" th:each="vehicle : ${vehicles}">
-                <a th:href="@{/user/vehicle-details/__${vehicle.registrationNumber}__}">
+                <a th:href="@{/user/book/vehicle-details/__${vehicle.registrationNumber}__}">
                     <div class="vehicle-card p-3">
                         <img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
                         <div class="card-body">
                             <h5 th:text="${vehicle.brandName}+'  '+ ${vehicle.modelName}"></h5>
                             <p th:text="${vehicle.vehicleType}"></p>
+                            <p th:text="${vehicle.registrationNumber}"></p>
                             <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
-                            <a class="btn btn-primary book-btn">Book</a>
+                            <div class="flex p-3">
+                                <a class="btn btn-primary book-btn" th:href="@{/user/book_vehicle/{id}(id=${vehicle.id})}">Book</a>
+                                <a class="btn btn-primary view-btn" th:href="@{/user/book/vehicle-details/__${vehicle.registrationNumber}__}">View</a>+
+                            </div>
                         </div>
                     </div>
                 </a>

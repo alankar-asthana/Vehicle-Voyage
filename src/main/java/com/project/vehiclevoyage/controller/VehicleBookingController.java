@@ -87,6 +87,32 @@ public class VehicleBookingController {
         }
     }
 
+    //Controller to display details of selected vehicle
+    @GetMapping("/user/book/vehicle-details/{registrationNumber}")
+    @PreAuthorize("hasRole('USER')")
+    public String registeredVehicles(@PathVariable String registrationNumber,Model model, Principal principal) {
+
+        User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+        Vehicle vehicle = vehicleService.getVehicleByRegistrationNumber(registrationNumber);
+        System.out.println("Vehicle: " + vehicle.toString());
+
+        if(vehicle == null){
+            Vehicle nullvehicle = new Vehicle();
+            model.addAttribute("message", new Message("Vehicle not found", "alert-danger"));
+            model.addAttribute("title", "Vehicle Details-VehicleVoyage");
+            model.addAttribute("vehicle", nullvehicle);
+            model.addAttribute("user", user);
+            return "booking_vehicle_details";
+        }
+
+        System.out.println("Vehicle Details: " + vehicle.toString());
+        model.addAttribute("title", "Vehicle Details-VehicleVoyage");
+        model.addAttribute("user", user);
+        model.addAttribute("vehicle", vehicle);
+        return "booking_vehicle_details";
+    }
+
+    //Method to calculate end date based on booking type
     private LocalDate calculateEndDate(BookingDetails bookingDetails) {
         LocalDate endDate = bookingDetails.getStartDate(); // Start with the selected start date
 
