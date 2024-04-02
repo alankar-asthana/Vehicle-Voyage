@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicle Booking Confirmation</title>
+</head>
+<body>
+    <section>
+        //Display booking details
+        <div class="row justify-content-center mt-5 mb-5 mr-5">
+            <div class="col-md-10 offset-md-2">
+                <div class="card" id="vehicleDetailsTable">
+                    <div class="card-header">
+                        <h1>Booking Details</h1>
+                    </div>
+                    <div class="vehicle-card p-3">
+                        <img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
+                        <div class="card-body">
+                            <div>
+                                <h2>Vehicle Details</h2>
+                                <p th:text="'Brand: ' + ${vehicle.brandName}"></p>
+                                <p th:text="'Model: ' + ${vehicle.modelName}"></p>
+                                <p th:text="'Type: ' + ${vehicle.vehicleType}"></p>
+                                <p th:text="'Start Date: ' + ${bookingDetails.startDate}"></p>
+                                <p th:text="'End Date: ' + ${bookingDetails.endDate}"></p>
+                                <p th:text="'Booking Type: ' + ${bookingDetails.bookingType}"></p>
+                                <p th:text="'Pickup Location: ' + ${bookingDetails.pickupLocation}"></p>
+                                <p th:text="'Total Cost: ' + ${bookingDetails.totalCost} + ' INR'"></p>
+                            </div>
+
+                            <!-- Display User Information -->
+                            <div>
+                                <h2>User Information</h2>
+                                <p th:text="'Name: ' + ${user.firstName} + ' ' + ${user.lastName}"></p>
+                                <p th:text="'Email: ' + ${user.email}"></p>
+                                <p th:text="'Phone: ' + ${user.contactNumber}"></p>
+                            </div>
+
+                            <!-- Payment Method and Confirmation Button -->
+                            <div>
+                                <h2>Select Payment Method</h2>
+                                <form th:action="@{/confirm-booking}" method="post">
+                                    <!-- Payment method options -->
+                                    <input type="radio" id="creditCard" name="paymentMethod" value="Credit Card">
+                                    <label for="creditCard">Credit Card</label><br>
+                                    <input type="radio" id="debitCard" name="paymentMethod" value="Debit Card">
+                                    <label for="debitCard">Debit Card</label><br>
+                                    <input type="radio" id="paypal" name="paymentMethod" value="PayPal">
+                                    <label for="paypal">PayPal</label><br>
+
+                                    <!-- Ask for license number -->
+                                    <label for="licenseNumber">Driver License Number:</label>
+                                    <input type="text" id="licenseNumber" name="licenseNumber">
+
+                                    <!-- Confirmation button -->
+                                    <button type="submit">Make Payment</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

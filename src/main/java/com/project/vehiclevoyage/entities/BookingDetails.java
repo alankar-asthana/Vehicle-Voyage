@@ -20,7 +20,7 @@ public class BookingDetails {
 
     private String userId; // User ID
     private String vehicleId; // Vehicle ID
-    private String vehicleType; //Vehicle Type
+    private String vehicleType; // Vehicle type
     private String bookingType; // Daily, weekly, monthly
     private String days; // Number of days
     private String weeks; // Number of weeks
@@ -35,6 +35,7 @@ public class BookingDetails {
     private String dropOffLocation; // Drop-off location
     private String paymentStatus; // Payment status
     private String paymentMethod; // Payment method
+    private String paymentId;
     private String additionalNotes; // Additional notes
     private Date createdAt; // Created timestamp
     private Date updatedAt; // Last updated timestamp

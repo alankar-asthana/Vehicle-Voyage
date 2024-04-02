@@ -7,14 +7,14 @@ import com.project.vehiclevoyage.helper.Message;
 import com.project.vehiclevoyage.service.BookingDetailsService;
 import com.project.vehiclevoyage.service.UserDetailsServiceImplementation;
 import com.project.vehiclevoyage.service.VehicleService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -47,10 +47,11 @@ public class VehicleBookingController {
     //Controller to open vehicle booking page and display available vehicles by city
     @PostMapping("/user/available_vehicles")
     @PreAuthorize("hasRole('USER')")
-    public String searchAvailableVehicles(@ModelAttribute BookingDetails bookingDetails, Model model, Principal principal) {
+    public String searchAvailableVehicles(@ModelAttribute BookingDetails bookingDetails, Model model, Principal principal, HttpSession session) {
             User user = (User) userDetailsService.loadUserByUsername(principal.getName());
         try {
             LocalDate endDate = calculateEndDate(bookingDetails); // Calculate end date based on booking type
+            bookingDetails.setEndDate(endDate);
 
             // Fetch all vehicles of the selected type and city
             List<Vehicle> allVehicles = vehicleService.findByCityAndVehicleType(bookingDetails.getCity(), bookingDetails.getVehicleType());
@@ -59,7 +60,7 @@ public class VehicleBookingController {
 
             // Fetch booked vehicles within the selected date range
             List<BookingDetails> bookedVehicles = bookingDetailsService.findBookedVehicles(
-                    bookingDetails.getCity(), bookingDetails.getVehicleType(), bookingDetails.getStartDate(), endDate);
+                    bookingDetails.getCity(), bookingDetails.getVehicleType(), bookingDetails.getStartDate(), bookingDetails.getEndDate());
             //Print id of booked vehicles
             bookedVehicles.forEach(booking -> System.out.println(booking.getVehicleId()));
 
@@ -77,6 +78,9 @@ public class VehicleBookingController {
                 throw new Exception("No available vehicles found.");
             }
 
+            session.setAttribute("bookingDetails", bookingDetails);
+
+            model.addAttribute("bookingDetails", bookingDetails);
             model.addAttribute("vehicles", availableVehicles);
             model.addAttribute("user", user);
             return "book-vehicle"; // Return the name of the Thymeleaf template to display the search results
@@ -90,7 +94,7 @@ public class VehicleBookingController {
     //Controller to display details of selected vehicle
     @GetMapping("/user/book/vehicle-details/{registrationNumber}")
     @PreAuthorize("hasRole('USER')")
-    public String registeredVehicles(@PathVariable String registrationNumber,Model model, Principal principal) {
+    public String registeredVehicles(@PathVariable String registrationNumber,Model model, Principal principal, HttpSession session) {
 
         User user = (User) userDetailsService.loadUserByUsername(principal.getName());
         Vehicle vehicle = vehicleService.getVehicleByRegistrationNumber(registrationNumber);
@@ -110,6 +114,52 @@ public class VehicleBookingController {
         model.addAttribute("user", user);
         model.addAttribute("vehicle", vehicle);
         return "booking_vehicle_details";
+    }
+
+    //Controller to open confirm booking details page
+    @GetMapping("/user/confirm-booking/{registrationNumber}")
+    @PreAuthorize("hasRole('USER')")
+    public String getConfirmBookingPage(@PathVariable String registrationNumber, Model model, Principal principal, HttpSession session) {
+
+        User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+        Vehicle vehicle = vehicleService.getVehicleByRegistrationNumber(registrationNumber);
+
+        BookingDetails bookingDetails = (BookingDetails) session.getAttribute("bookingDetails");
+        bookingDetails.setVehicleId(vehicle.getId());
+        String pickupLocation = vehicle.getHouseNumber_shopNumber()+" "+vehicle.getColony()+" "+vehicle.getCity()+" "+vehicle.getState()+" "+vehicle.getCountry()+" "+vehicle.getPincode();
+        bookingDetails.setPickupLocation(pickupLocation);
+        System.out.println("Booking Details: " + bookingDetails.toString());
+
+        //Calculate Total Cost
+        double totalCost = 0;
+        if ("Daily".equals(bookingDetails.getBookingType()) && bookingDetails.getVehicleType().equals("Car")) {
+            totalCost = 1000 * Long.parseLong(bookingDetails.getDays());
+        }
+        else if ("Weekly".equals(bookingDetails.getBookingType()) && bookingDetails.getVehicleType().equals("Car")) {
+            totalCost = (1000 * (Long.parseLong(bookingDetails.getWeeks()) * 7))*0.9;
+        }
+        else if ("Monthly".equals(bookingDetails.getBookingType()) && bookingDetails.getVehicleType().equals("Car")) {
+            totalCost = (1000 * (Long.parseLong(bookingDetails.getMonths()) * 30))*0.8;
+        }
+        else if ("Daily".equals(bookingDetails.getBookingType()) && bookingDetails.getVehicleType().equals("Bike")) {
+            totalCost = 500 * Long.parseLong(bookingDetails.getDays());
+        }
+        else if ("Weekly".equals(bookingDetails.getBookingType()) && bookingDetails.getVehicleType().equals("Bike")) {
+            totalCost = (500 * (Long.parseLong(bookingDetails.getWeeks()) * 7))*0.9;
+        }
+        else if ("Monthly".equals(bookingDetails.getBookingType()) && bookingDetails.getVehicleType().equals("Bike")) {
+            totalCost = (500 * (Long.parseLong(bookingDetails.getMonths()) * 30))*0.8;
+        }
+
+        bookingDetails.setTotalCost(totalCost);
+
+        session.setAttribute("bookingDetails", bookingDetails);
+
+        model.addAttribute("bookingDetails", bookingDetails);
+        model.addAttribute("vehicle", vehicle);
+        model.addAttribute("user", user);
+        return "booking_confirmation_page";
+
     }
 
     //Method to calculate end date based on booking type

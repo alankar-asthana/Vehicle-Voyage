@@ -80,8 +80,8 @@
                             <p th:text="${vehicle.registrationNumber}"></p>
                             <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
                             <div class="flex p-3">
-                                <a class="btn btn-primary book-btn" th:href="@{/user/book_vehicle/{id}(id=${vehicle.id})}">Book</a>
-                                <a class="btn btn-primary view-btn" th:href="@{/user/book/vehicle-details/__${vehicle.registrationNumber}__}">View</a>+
+                                <a class="btn btn-primary book-btn" th:href="@{/user/confirm-booking/__${vehicle.registrationNumber}__}">Book</a>
+                                <a class="btn btn-primary view-btn" th:href="@{/user/book/vehicle-details/__${vehicle.registrationNumber}__}">View</a>
                             </div>
                         </div>
                     </div>
