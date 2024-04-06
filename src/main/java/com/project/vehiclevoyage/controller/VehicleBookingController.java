@@ -7,7 +7,11 @@ import com.project.vehiclevoyage.helper.Message;
 import com.project.vehiclevoyage.service.BookingDetailsService;
 import com.project.vehiclevoyage.service.UserDetailsServiceImplementation;
 import com.project.vehiclevoyage.service.VehicleService;
+import com.razorpay.Order;
 import jakarta.servlet.http.HttpSession;
+import netscape.javascript.JSObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,10 +19,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import com.razorpay.RazorpayClient;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,6 +45,7 @@ public class VehicleBookingController {
     @PreAuthorize("hasRole('USER')")
     public String getVehicleBookingPage(Model model, Principal principal) {
 
+        System.out.println("Opening booking page for user: " + principal.getName());
         User user = (User) userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", user);
         return "book-vehicle";
@@ -160,6 +167,44 @@ public class VehicleBookingController {
         model.addAttribute("user", user);
         return "booking_confirmation_page";
 
+    }
+
+    //Controller to create order for payment
+    @PostMapping("/user/payment/create-order")
+    @PreAuthorize("hasRole('USER')")
+    @ResponseBody
+    public String createOrder(@RequestBody Map<String, Object> data, Principal principal, HttpSession session, Model model) throws Exception
+    {
+            System.out.println("createOrder method executed");
+        try {
+            System.out.println("Data: " + data.toString());
+            String licenseNumber = (String) data.get("licenseNumber");
+            User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+            if(!user.getLicenseNumber().equals(licenseNumber)){
+                throw new Exception("Invalid license number");
+            }
+
+            BookingDetails bookingDetails = (BookingDetails) session.getAttribute("bookingDetails");
+
+            int amount = (int) bookingDetails.getTotalCost();
+            double receiptNumber = Math.random()*1000;
+            String receiptNumberStr = String.format("%.0f", receiptNumber);
+
+            RazorpayClient client = new RazorpayClient("rzp_test_FGwK1TkYDMtNSp", "ANQgEm2FPVkfj487UjbpfNdz");
+
+            JSONObject ob = new JSONObject();
+            ob.put("amount", amount*100);
+            ob.put("currency", "INR");
+            ob.put("receipt", receiptNumberStr);
+
+            Order order = client.Orders.create(ob); //Create order using client;
+            System.out.println("Order: " + order.toString());
+
+            return order.toString();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "error";
+        }
     }
 
     //Method to calculate end date based on booking type

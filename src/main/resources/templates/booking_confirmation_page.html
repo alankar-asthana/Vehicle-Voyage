@@ -6,6 +6,7 @@
 </head>
 <body>
     <section>
+        <!--Booking confirmation page -->
         //Display booking details
         <div class="row justify-content-center mt-5 mb-5 mr-5">
             <div class="col-md-10 offset-md-2">
@@ -31,30 +32,28 @@
                             <!-- Display User Information -->
                             <div>
                                 <h2>User Information</h2>
-                                <p th:text="'Name: ' + ${user.firstName} + ' ' + ${user.lastName}"></p>
-                                <p th:text="'Email: ' + ${user.email}"></p>
-                                <p th:text="'Phone: ' + ${user.contactNumber}"></p>
+                                <p th:text="'Name: ' + ${user.firstName} + ' ' + ${user.lastName}" id="userName"></p>
+                                <p th:text="'Email: ' + ${user.email}" id="userEmail"></p>
+                                <p th:text="'Phone: ' + ${user.contactNumber}" id="userPhone"></p>
                             </div>
 
                             <!-- Payment Method and Confirmation Button -->
                             <div>
                                 <h2>Select Payment Method</h2>
-                                <form th:action="@{/confirm-booking}" method="post">
-                                    <!-- Payment method options -->
-                                    <input type="radio" id="creditCard" name="paymentMethod" value="Credit Card">
-                                    <label for="creditCard">Credit Card</label><br>
-                                    <input type="radio" id="debitCard" name="paymentMethod" value="Debit Card">
-                                    <label for="debitCard">Debit Card</label><br>
-                                    <input type="radio" id="paypal" name="paymentMethod" value="PayPal">
-                                    <label for="paypal">PayPal</label><br>
 
                                     <!-- Ask for license number -->
                                     <label for="licenseNumber">Driver License Number:</label>
                                     <input type="text" id="licenseNumber" name="licenseNumber">
 
+                                    <!-- Hidden License Number Field -->
+                                    <input type="hidden" id="userLicenseNumber" th:value="${user.licenseNumber}" name="licenseNumber">
+
+                                    <!-- Hidden payment fields -->
+                                    <input type="hidden" id="paymentAmount" th:value="${bookingDetails.totalCost}" name="totalCost">
+
                                     <!-- Confirmation button -->
-                                    <button type="submit">Make Payment</button>
-                                </form>
+                                    <button type="submit" class="btn btn-primary" onclick="createOrder()">Make Payment</button>
+
                             </div>
                         </div>
                     </div>
