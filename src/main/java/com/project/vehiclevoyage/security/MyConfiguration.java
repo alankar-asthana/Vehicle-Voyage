@@ -44,6 +44,7 @@ public class MyConfiguration {
                         .requestMatchers("/vehicle/upload-image").permitAll()
                         .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/admin/**").permitAll()
+                        .requestMatchers("/send-email").permitAll()
                         .requestMatchers("/js/**").permitAll()
                         .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/images/**").permitAll()

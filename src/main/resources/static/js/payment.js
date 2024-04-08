@@ -138,8 +138,11 @@ const createOrder = () => {
             console.log(response.razorpay_order_id);
             console.log(response.razorpay_signature);
             console.log("payment successful");
+
+            // Update the payment status in the database
+            updatePaymentStatus(response.razorpay_payment_id, response.razorpay_order_id, "paid");
 //            alert("Congrats!! Payment successful");
-            swal.fire("Payment Successful", "Thank you for your payment", "success");
+            swal("Payment Successful", "Thank you for your payment", "success");
           },
           prefill: {
             name: $("#userName").val(),
@@ -164,15 +167,42 @@ const createOrder = () => {
           console.log(response.error.reason);
           console.log(response.error.metadata.order_id);
           console.log(response.error.metadata.payment_id);
-//          alert("Oops!! Payment failed");
-          swal.fire("Payment Failed", "Please try again", "error");
+          //alert("Oops!! Payment failed");
+          // Handle payment failed  error by deleting the order details from the database
+          updatePaymentStatus(response.error.metadata.payment_id, response.error.metadata.order_id, "failed");
+          swal("Payment Failed", "Please try again", "error");
         });
         rzp.open();
       }
     },
     error: function (error) {
-      console.log(error);
-      alert("Something went wrong");
+        console.log(error);
+        swal({
+            title: "Error",
+            text: "Something went wrong, please try again. " + error.responseText,
+            icon: "error"
+        });
     },
   });
 };
+
+// Function to update payment status in the database
+const updatePaymentStatus = (paymentId, orderId, status) => {
+  $.ajax({
+    type: "POST",
+    url: "/user/payment/update-payment-status",
+    data: JSON.stringify({
+      paymentId: paymentId,
+      orderId: orderId,
+      status: status,
+    }),
+    dataType: "json",
+    contentType: "application/json",
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
+}

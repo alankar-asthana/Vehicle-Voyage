@@ -11,7 +11,20 @@ import java.util.List;
 
 @Repository
 public interface BookingDetailsRepository extends MongoRepository<BookingDetails, String> {
-    @Query("{$and: [{city: ?0}, {vehicleType: ?1}, {$or: ["
+//    @Query("{$and: [{city: ?0}, {vehicleType: ?1}, {$or: ["
+//            + "{startDate: {$lte: ?2}, endDate: {$gte: ?2}}, "
+//            + "{startDate: {$lte: ?3}, endDate: {$gte: ?3}}, "
+//            + "{$and: [{startDate: {$gte: ?2}}, {endDate: {$lte: ?3}}]}]}]}," +
+//            " {bookingStatus: ?4}]")
+//    List<BookingDetails> findOverlappingBookings(
+//            @Param("city") String city,
+//            @Param("vehicleType") String vehicleType,
+//            @Param("startDate") LocalDate startDate,
+//            @Param("endDate") LocalDate endDate,
+//            @Param("bookingStatus") String bookingStatus
+//    );
+
+    @Query("{$and: [{city: ?0}, {vehicleType: ?1}, {bookingStatus: ?4}, {$or: ["
             + "{startDate: {$lte: ?2}, endDate: {$gte: ?2}}, "
             + "{startDate: {$lte: ?3}, endDate: {$gte: ?3}}, "
             + "{$and: [{startDate: {$gte: ?2}}, {endDate: {$lte: ?3}}]}]}]}")
@@ -19,6 +32,14 @@ public interface BookingDetailsRepository extends MongoRepository<BookingDetails
             @Param("city") String city,
             @Param("vehicleType") String vehicleType,
             @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate
+            @Param("endDate") LocalDate endDate,
+            @Param("bookingStatus") String bookingStatus
     );
+
+
+    BookingDetails findByOrderId(String orderId);
+
+    void deleteByOrderId(String orderId);
+
+    BookingDetails findByVehicleId(String id);
 }

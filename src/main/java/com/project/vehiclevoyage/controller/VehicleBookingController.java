@@ -13,7 +13,9 @@ import netscape.javascript.JSObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ import com.razorpay.RazorpayClient;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,14 +71,14 @@ public class VehicleBookingController {
 
             // Fetch booked vehicles within the selected date range
             List<BookingDetails> bookedVehicles = bookingDetailsService.findBookedVehicles(
-                    bookingDetails.getCity(), bookingDetails.getVehicleType(), bookingDetails.getStartDate(), bookingDetails.getEndDate());
+                    bookingDetails.getCity(), bookingDetails.getVehicleType(), bookingDetails.getStartDate(), bookingDetails.getEndDate(), "Booked");
             //Print id of booked vehicles
-            bookedVehicles.forEach(booking -> System.out.println(booking.getVehicleId()));
+            bookedVehicles.forEach(booking -> System.out.println(booking.getVehicle().getId()));
 
             // Filter out booked vehicles from all vehicles to get available vehicles
             List<Vehicle> availableVehicles = allVehicles.stream()
                     .filter(vehicle -> !bookedVehicles.stream().anyMatch(booking ->
-                            booking.getVehicleId().equals(vehicle.getId())))
+                            booking.getVehicle().getId().equals(vehicle.getId())))
                     .collect(Collectors.toList());
             //Filter out vehicles which are owned by user itself
             availableVehicles = availableVehicles.stream()
@@ -132,9 +136,14 @@ public class VehicleBookingController {
         Vehicle vehicle = vehicleService.getVehicleByRegistrationNumber(registrationNumber);
 
         BookingDetails bookingDetails = (BookingDetails) session.getAttribute("bookingDetails");
-        bookingDetails.setVehicleId(vehicle.getId());
+        bookingDetails.setVehicle(vehicle);
+        bookingDetails.setUser(user);
         String pickupLocation = vehicle.getHouseNumber_shopNumber()+" "+vehicle.getColony()+" "+vehicle.getCity()+" "+vehicle.getState()+" "+vehicle.getCountry()+" "+vehicle.getPincode();
         bookingDetails.setPickupLocation(pickupLocation);
+        bookingDetails.setDropOffLocation(pickupLocation);
+        bookingDetails.setBookingStatus("Pending");
+        bookingDetails.setBookingDate(new Date());
+
         System.out.println("Booking Details: " + bookingDetails.toString());
 
         //Calculate Total Cost
@@ -169,7 +178,7 @@ public class VehicleBookingController {
 
     }
 
-    //Controller to create order for payment
+    //Controller to create order for payment and store order details in database
     @PostMapping("/user/payment/create-order")
     @PreAuthorize("hasRole('USER')")
     @ResponseBody
@@ -186,6 +195,19 @@ public class VehicleBookingController {
 
             BookingDetails bookingDetails = (BookingDetails) session.getAttribute("bookingDetails");
 
+            //First we will check if order is created for that vehicle and booking status is pending
+            // then we will not create an order again for that vehicle and throw an error that order is already created for someone
+            // fetch booking details from database by vehicle id and then first compare the booking status and booking date
+            // if booking status is pending and booking date is today then we will not create an order
+
+            BookingDetails bookingDetailsFromDB = bookingDetailsService.getBookingDetailsByVehicleId(bookingDetails.getVehicle().getId());
+            if (bookingDetailsFromDB != null &&
+                    bookingDetailsFromDB.getBookingStatus().equals("Pending") &&
+                    bookingDetailsFromDB.getBookingDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())) {
+                throw new Exception("Order is already created for this vehicle");
+            }
+
+
             int amount = (int) bookingDetails.getTotalCost();
             double receiptNumber = Math.random()*1000;
             String receiptNumberStr = String.format("%.0f", receiptNumber);
@@ -200,12 +222,49 @@ public class VehicleBookingController {
             Order order = client.Orders.create(ob); //Create order using client;
             System.out.println("Order: " + order.toString());
 
+            //Set and save order details into booking details
+            bookingDetails.setOrderId(order.get("id"));
+            bookingDetails.setPaymentStatus("Pending");
+            bookingDetails.setReceiptNumber(receiptNumberStr);
+            bookingDetails.setPaymentId(null);
+
+            bookingDetailsService.saveBookingDetails(bookingDetails);
+
             return order.toString();
         }catch (Exception e){
             e.printStackTrace();
-            return "error";
+            return e.getMessage(); // Return the error message
         }
     }
+
+    //Controller to update payment details in database after successful payment
+    @PostMapping("/user/payment/update-payment-status")
+    public ResponseEntity<?> updatePaymentStatus(@RequestBody Map<String, Object> data) {
+        BookingDetails bookingDetails = bookingDetailsService.getBookingDetailsByOrderId((String) data.get("orderId"));
+        bookingDetails.setPaymentId((String) data.get("paymentId"));
+        bookingDetails.setPaymentStatus(data.get("status").toString());
+
+        if("paid".equals(data.get("status").toString())){
+            bookingDetails.setBookingStatus("Booked");
+        }
+        else{
+            bookingDetails.setBookingStatus("Booking Failed");
+        }
+
+        bookingDetailsService.saveBookingDetails(bookingDetails);
+
+        return ResponseEntity.ok(bookingDetails);
+    }
+
+    //Controller to delete booking details in database
+    @PostMapping("/user/payment/delete-booking-details")
+    public ResponseEntity<?> deleteBookingDetails(@RequestBody Map<String, Object> data) {
+        String orderId = (String) data.get("orderId");
+        bookingDetailsService.deleteBookingDetailsByOrderId(orderId);
+        return ResponseEntity.ok("Booking details deleted successfully");
+    }
+
+
 
     //Method to calculate end date based on booking type
     private LocalDate calculateEndDate(BookingDetails bookingDetails) {

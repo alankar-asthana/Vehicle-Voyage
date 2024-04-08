@@ -13,7 +13,23 @@ public class BookingDetailsService {
 
     @Autowired
     private BookingDetailsRepository bookingDetailsRepository;
-    public List<BookingDetails> findBookedVehicles(String city, String vehicleType, LocalDate startDate, LocalDate endDate) {
-        return bookingDetailsRepository.findOverlappingBookings(city, vehicleType, startDate, endDate);
+    public List<BookingDetails> findBookedVehicles(String city, String vehicleType, LocalDate startDate, LocalDate endDate, String bookingStatus) {
+        return bookingDetailsRepository.findOverlappingBookings(city, vehicleType, startDate, endDate, bookingStatus);
+    }
+
+    public void saveBookingDetails(BookingDetails bookingDetails) {
+        bookingDetailsRepository.save(bookingDetails);
+    }
+
+    public BookingDetails getBookingDetailsByOrderId(String orderId) {
+        return bookingDetailsRepository.findByOrderId(orderId);
+    }
+
+    public void deleteBookingDetailsByOrderId(String orderId) {
+        bookingDetailsRepository.deleteByOrderId(orderId);
+    }
+
+    public BookingDetails getBookingDetailsByVehicleId(String id) {
+        return bookingDetailsRepository.findByVehicleId(id);
     }
 }

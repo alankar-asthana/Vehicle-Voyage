@@ -90,8 +90,6 @@ public class Vehicle{
     private Date updatedDate=new Date();
     @DBRef
     private User owner;
-    @DBRef
-    private BookingDetails bookingDetails;
 
     public void setOwner(User owner) {
         this.owner = owner;
