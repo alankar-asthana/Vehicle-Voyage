@@ -32,4 +32,20 @@ public class BookingDetailsService {
     public BookingDetails getBookingDetailsByVehicleId(String id) {
         return bookingDetailsRepository.findByVehicleId(id);
     }
+
+    public List<BookingDetails> getBookingDetailsByUserId(String id) {
+        return bookingDetailsRepository.findByUserId(id);
+    }
+
+    public String generateOtp() {
+        return String.format("%06d", (int) (Math.random() * 999999));
+    }
+
+    public List<BookingDetails> getBookingDetailsByOwnerId(String id) {
+        return bookingDetailsRepository.findByOwnerId(id);
+    }
+
+    public BookingDetails getBookingDetailsById(String bookingDetailsId) {
+        return bookingDetailsRepository.findById(bookingDetailsId).get();
+    }
 }

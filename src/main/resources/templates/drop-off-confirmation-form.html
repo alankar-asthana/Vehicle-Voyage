@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drop-off Confirmation</title>
+</head>
+<body>
+<h1>Drop-off Confirmation</h1>
+<div class="alert alert-danger" th:if="${error}">
+  <p th:text="${error}"></p>
+</div>
+<form action="#" th:action="@{/user/confirm-drop-off/{id}(id=${bookingDetails.id})}" method="post">
+  <div>
+    <label for="otp">Enter OTP:</label>
+    <input type="text" id="otp" name="otp" required>
+  </div>
+  <button type="submit">Confirm Drop-off</button>
+</form>
+</body>
+</html>

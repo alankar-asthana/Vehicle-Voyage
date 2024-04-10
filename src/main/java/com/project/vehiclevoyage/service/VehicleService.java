@@ -1,6 +1,5 @@
 package com.project.vehiclevoyage.service;
 
-import com.project.vehiclevoyage.entities.BookingDetails;
 import com.project.vehiclevoyage.entities.User;
 import com.project.vehiclevoyage.entities.Vehicle;
 import com.project.vehiclevoyage.repository.VehicleRepository;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VehicleService{
@@ -21,9 +19,9 @@ public class VehicleService{
         return vehicleRepository.findByOwner_Id(user.getId());
     }
 
-    public Optional<Vehicle> getVehicleById(String id) {
+    public Vehicle getVehicleById(String id) {
 
-        return vehicleRepository.findById(id);
+        return vehicleRepository.findById(id).get();
     }
 
     public Vehicle getVehicleByRegistrationNumber(String registrationNumber) {
@@ -47,5 +45,15 @@ public class VehicleService{
     public List<Vehicle> findByCityAndVehicleType(String city, String vehicleType) {
 
         return vehicleRepository.findByCityAndVehicleType(city, vehicleType);
+    }
+
+    public List<String> getVehicleIdsByUserId(String id) {
+
+        return vehicleRepository.getVehicleIdsByOwnerId(id);
+    }
+
+    public List<String> getVehicleIdsByOwnerId(String id) {
+
+        return vehicleRepository.getVehicleIdsByOwnerId(id);
     }
 }

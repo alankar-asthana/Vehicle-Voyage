@@ -5,6 +5,7 @@
     <title th:text="${title}"></title>
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css"/>
     <link rel="stylesheet" th:href="@{/css/sidebarstyle.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/bookinghistory.css}" type="text/css"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Script files -->
@@ -43,7 +44,7 @@
 <!--        <a th:href="@{/user/profile}" class="item pb-3 ml-3"><i class="fa-solid fa-user p-3"></i>Profile</a>-->
         <a th:href="@{/user/add-vehicle-form}" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-id-card p-3"></i>Add New Vehicle</a>
         <a th:href="@{/user/vehicle-booking}" class="item pb-3 ml-3 text-white"><i class="fas fa-plus-circle p-3"></i>Book a vehicle</a>
-        <a href="" class="item pb-3 ml-3 text-white"><i class="fas fa-history p-3"></i>Booking History</a>
+        <a th:href="@{/user/booking-history}" class="item pb-3 ml-3 text-white"><i class="fas fa-history p-3"></i>Booking History</a>
         <a href="" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-screwdriver-wrench p-3"></i>Settings</a>
         <a th:href="@{/logout}" class="item pb-3 ml-3 text-white"><i class="fa-solid fa-right-from-bracket p-3"></i>Logout</a>
         <div class="divider mt-5 border"></div>

@@ -138,6 +138,7 @@ public class VehicleBookingController {
         BookingDetails bookingDetails = (BookingDetails) session.getAttribute("bookingDetails");
         bookingDetails.setVehicle(vehicle);
         bookingDetails.setUser(user);
+        bookingDetails.setOwnerId(vehicle.getOwner().getId());
         String pickupLocation = vehicle.getHouseNumber_shopNumber()+" "+vehicle.getColony()+" "+vehicle.getCity()+" "+vehicle.getState()+" "+vehicle.getCountry()+" "+vehicle.getPincode();
         bookingDetails.setPickupLocation(pickupLocation);
         bookingDetails.setDropOffLocation(pickupLocation);
@@ -250,6 +251,9 @@ public class VehicleBookingController {
         else{
             bookingDetails.setBookingStatus("Booking Failed");
         }
+
+        //generate OTP
+        bookingDetails.setOtp(bookingDetailsService.generateOtp());
 
         bookingDetailsService.saveBookingDetails(bookingDetails);
 

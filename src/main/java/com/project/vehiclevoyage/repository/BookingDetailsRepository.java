@@ -1,6 +1,7 @@
 package com.project.vehiclevoyage.repository;
 
 import com.project.vehiclevoyage.entities.BookingDetails;
+import com.project.vehiclevoyage.service.BookingDetailsService;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -42,4 +43,8 @@ public interface BookingDetailsRepository extends MongoRepository<BookingDetails
     void deleteByOrderId(String orderId);
 
     BookingDetails findByVehicleId(String id);
+
+    List<BookingDetails> findByUserId(String id);
+
+    List<BookingDetails> findByOwnerId(String id);
 }

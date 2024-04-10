@@ -24,6 +24,8 @@ public class BookingDetails {
     @DBRef
     private Vehicle vehicle; // Vehicle ID
 
+    private String ownerId;
+
     private String vehicleType; // Vehicle type
     private String bookingType; // Daily, weekly, monthly
     private String days; // Number of days
@@ -47,6 +49,8 @@ public class BookingDetails {
     private String dropOffLocation; // Drop-off location
     private Date createdAt; // Created timestamp
     private Date updatedAt; // Last updated timestamp
+
+    private String otp;
 
     // Getters and setters
 

@@ -15,7 +15,8 @@ public interface VehicleRepository extends MongoRepository<Vehicle, String> {
 
     Vehicle findByRegistrationNumberAndOwner_Id(String registrationNumber, String ownerId);
 
-    Optional<Vehicle> findById(String id);
+//    Optional<Vehicle> findById(String id);
+
 
     List<Vehicle> findByCity(String city);
 
@@ -24,4 +25,6 @@ public interface VehicleRepository extends MongoRepository<Vehicle, String> {
     List<Vehicle> findByCityAndIsAvailable(String city, boolean isAvailable);
 
     List<Vehicle> findByCityAndVehicleType(String city, String vehicleType);
+
+    List<String> getVehicleIdsByOwnerId(String id);
 }

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{userbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicle Booking History</title>
+</head>
+<body>
+<section>
+    <!--Booking history page-->
+    <!--Display booking history-->
+
+    <div class="row justify-content-center mt-5 mb-5 mr-5">
+        <div class="col-md-10 offset-md-2">
+            <div class="card-header">
+                <h1>Booking History</h1>
+            </div>
+            <div class="card" id="vehicleDetailsTable">
+                <div class="vehicle-card p-3">
+                    <div th:each="bookingDetails : ${bookingDetailsList}">
+                        <h3><b>Vehicle Details</b></h3>
+                        <table class="table table-bordered table-striped table-responsive mt-3 mb-3 w-100 text-center table-hover">
+                            <tr>
+                                <th>Model</th>
+                                <th>Registration Number</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Booking Type</th>
+                                <th>Pickup Location</th>
+                                <th>Total Cost</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td th:text="${bookingDetails.vehicle.brandName} + ' ' + ${bookingDetails.vehicle.modelName}"></td>
+                                <td th:text="${bookingDetails.vehicle.registrationNumber}"></td>
+                                <td th:text="${bookingDetails.startDate}"></td>
+                                <td th:text="${bookingDetails.endDate}"></td>
+                                <td th:text="${bookingDetails.bookingType}"></td>
+                                <td th:text="${bookingDetails.pickupLocation}"></td>
+                                <td th:text="${bookingDetails.totalCost} + ' INR'"></td>
+                                <td th:text="${bookingDetails.bookingStatus}"></td>
+                            </tr>
+                        </table>
+
+                        <div class="text-center d-flex">
+                            <!-- Option to download receipt in the form of button -->
+                            <a class="btn btn-success mr-3" th:href="@{/user/download-receipt/{id}(id=${bookingDetails.id})}">Download Receipt</a>
+
+                            <!-- Option to confirm pickup or drop-off. Only for user who has booked the vehicle -->
+                            <div th:if="${bookingDetails.user.id} != ${user.id}">
+                                <div th:if="${bookingDetails.bookingStatus == 'Booked'}">
+                                    <a class="btn btn-success" th:href="@{/user/confirm-pickup/{id}(id=${bookingDetails.id})}">Confirm Pick-Up</a>
+                                </div>
+                                <div th:if="${bookingDetails.bookingStatus == 'Picked-Up'}">
+                                    <a class="btn btn-success" th:href="@{/user/confirm-drop-off/{id}(id=${bookingDetails.id})}">Confirm Drop-Off</a>
+                                </div>
+                            </div>
+                            <!-- Option to cancel booking. Only for user who has booked the vehicle -->
+                            <div th:if="${bookingDetails.user.id} == ${user.id}">
+                                <a class="btn btn-danger" th:href="@{/user/cancel-booking/{id}(id=${bookingDetails.id})}">Cancel Booking</a>
+                            </div>
+                        </div>
+
+                        <!-- Display User/owner Information.
+                         //  If user has booked the vehicle then display owner information
+                         //  If user is owner then display user information of the user who has booked the vehicle-->
+                        <table class="table table-bordered table-striped table-responsive mt-3 mb-3 text-center table-hover">
+                            <div th:if="${bookingDetails.user.id} != ${user.id}">
+                                <h2><b>User Information</b></h2>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                </tr>
+                                <tr>
+                                    <td th:text="${bookingDetails.user.firstName} + ' ' + ${bookingDetails.user.lastName}"></td>
+                                    <td th:text="${bookingDetails.user.email}"></td>
+                                    <td th:text="${bookingDetails.user.contactNumber}"></td>
+                                </tr>
+
+                            </div>
+                            <div th:if="${bookingDetails.user.id} == ${user.id}">
+                                <h3><b>Owner Information</b></h3>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>OTP</th>
+                                </tr>
+                                <tr>
+                                    <td th:text="${bookingDetails.vehicle.owner.firstName} + ' ' + ${bookingDetails.vehicle.owner.lastName}"></td>
+                                    <td th:text="${bookingDetails.vehicle.owner.email}"></td>
+                                    <td th:text="${bookingDetails.vehicle.owner.contactNumber}"></td>
+                                    <td>
+                                        <!-- Display OTP if booking status is booked or picked-up -->
+                                        <div th:if="${bookingDetails.bookingStatus == 'Booked' or bookingDetails.bookingStatus == 'Picked-Up'}">
+                                            <p><b>OTP:</b> <span th:text="${bookingDetails.otp}"></span></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
+                        </table>
+                        <!--Ask for rating and review if booking status is dropped off and user id is equal to user id-->
+                        <div th:if="${bookingDetails.user.id} == ${user.id} and ${bookingDetails.bookingStatus == 'Dropped-Off'}">
+                            <h3><b>Rating and Review</b></h3>
+                            <form action="#" th:action="@{/user/rate-and-review/{id}(id=${bookingDetails.id})}" method="post">
+                                <div>
+                                    <label>Rating:</label>
+                                    <!--5 radio button for rating-->
+                                    <input type="radio" id="rating1" name="rating" value="1">
+                                    <input type="radio" id="rating2" name="rating" value="2">
+                                    <input type="radio" id="rating3" name="rating" value="3">
+                                    <input type="radio" id="rating4" name="rating" value="4">
+                                    <input type="radio" id="rating5" name="rating" value="5">
+                                </div>
+                                <div>
+                                    <label for="review">Review:</label>
+                                    <input type="text" id="review" name="review">
+                                </div>
+                                <div>
+                                    <button type="submit">Submit</button>
+                                </div>
+                            </form>
+                        <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>
+
+<!--<div th:if="${bookingDetails.user.id} != ${user.id}">-->
+<!--    <h2><b>User Information</b></h2>-->
+<!--    <p><b>Name:</b> <span th:text="${bookingDetails.user.firstName} + ' ' + ${bookingDetails.user.lastName}" id="userName"></span></p>-->
+<!--    <p><b>Email:</b> <span th:text="${bookingDetails.user.email}" id="userEmail"></span></p>-->
+<!--    <p><b>Phone:</b> <span th:text="${bookingDetails.user.contactNumber}" id="userPhone"></span></p>-->
+<!--</div>-->
+<!--<div th:if="${bookingDetails.user.id} == ${user.id}">-->
+<!--    <h2><b>Owner Information</b></h2>-->
+<!--    <p><b>Name:</b> <span th:text="${bookingDetails.vehicle.owner.firstName} + ' ' + ${bookingDetails.vehicle.owner.lastName}" id="ownerName"></span></p>-->
+<!--    <p><b>Email:</b> <span th:text="${bookingDetails.vehicle.owner.email}" id="ownerEmail"></span></p>-->
+<!--    <p><b>Phone:</b> <span th:text="${bookingDetails.vehicle.owner.contactNumber}" id="ownerPhone"></span></p>-->
+
+<!--</div>-->
