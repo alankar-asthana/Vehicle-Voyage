@@ -8,9 +8,8 @@
     <section>
         <!--Booking confirmation page -->
         <!--Display booking details-->
-        <div class="row justify-content-center mt-5 mb-5 mr-5">
-            <div class="col-md-10 offset-md-2">
-                <div class="card" id="vehicleDetailsTable">
+            <div>
+                <div class="card mt-3 col-md-4 offset-md-3" id="vehicleDetailsTable">
                     <div class="card-header">
                         <h1>Booking Details</h1>
                     </div>
@@ -36,13 +35,14 @@
                                 <p th:text="'Email: ' + ${user.email}" id="userEmail"></p>
                                 <p th:text="'Phone: ' + ${user.contactNumber}" id="userPhone"></p>
                             </div>
+                            <!--dark color horizontal line-->
+                            <hr class="bg-dark">
+                            <hr class="bg-dark">
 
                             <!-- Payment Method and Confirmation Button -->
-                            <div>
-                                <h2>Select Payment Method</h2>
-
+                            <div class="form-group p-2 mt-3">
                                     <!-- Ask for license number -->
-                                    <label for="licenseNumber">Driver License Number:</label>
+                                    <label for="licenseNumber">Enter License Number:</label>
                                     <input type="text" id="licenseNumber" name="licenseNumber">
 
                                     <!-- Hidden License Number Field -->
@@ -52,14 +52,13 @@
                                     <input type="hidden" id="paymentAmount" th:value="${bookingDetails.totalCost}" name="totalCost">
 
                                     <!-- Confirmation button -->
-                                    <button type="submit" class="btn btn-primary" onclick="createOrder()">Make Payment</button>
+                                    <button type="submit" class="btn btn-primary m-2" onclick="createOrder()">Make Payment</button>
 
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 </body>
 </html>

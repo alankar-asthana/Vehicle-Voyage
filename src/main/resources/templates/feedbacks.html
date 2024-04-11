@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{adminbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback-Vehicle Voyage</title>
+</head>
+<body>
+  <section>
+    <!--Search Bar to view feedbacks of particular vehicle by registration number-->
+    <div class="container">
+      <h2 style="color: #333;">Feedbacks</h2>
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <form action="#" method="get" class="d-flex align-items-center">
+            <input type="text" class="form-control" id="feedbackSearch" placeholder="Search by Registration Number">
+            <button type="submit" class="btn btn-primary ml-3">Search</button>
+          </form>
+        </div>
+      </div>
+      <!-- Table to display feedbacks -->
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Registration Number</th>
+          <th>Rating</th>
+          <th>Feedback</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over feedbacks -->
+        <tr th:each="feedback : ${feedbacks}">
+          <td th:text="${feedback.id}"></td>
+          <td th:text="${feedback.user.fullName}"></td>
+          <td th:text="${feedback.vehicle.registrationNumber}"></td>
+          <td th:text="${feedback.rating}"></td>
+          <td th:text="${feedback.review}"></td>
+          <td>
+            <!-- Action buttons -->
+            <a class="btn btn-primary" th:href="@{/feedback/details/__${feedback.id}__}">View</a>
+            <a class="btn btn-danger" th:href="@{/feedback/delete/__${feedback.id}__}">Delete</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</body>
+</html>

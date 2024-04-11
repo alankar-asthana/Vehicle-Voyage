@@ -48,4 +48,8 @@ public class BookingDetailsService {
     public BookingDetails getBookingDetailsById(String bookingDetailsId) {
         return bookingDetailsRepository.findById(bookingDetailsId).get();
     }
+
+    public List<BookingDetails> getBookings() {
+        return bookingDetailsRepository.findAll();
+    }
 }

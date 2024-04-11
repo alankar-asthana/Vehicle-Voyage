@@ -56,4 +56,8 @@ public class VehicleService{
 
         return vehicleRepository.getVehicleIdsByOwnerId(id);
     }
+
+    public List<Vehicle> getVehicles() {
+        return vehicleRepository.findAll();
+    }
 }

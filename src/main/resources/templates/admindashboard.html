@@ -1,0 +1,59 @@
+<!-- Extend adminLayout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{adminbase :: layout(~{::section})}">
+<head>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+<section style="background-color: #f8f9fa; padding-top: 50px;">
+  <!-- Content Section -->
+  <div class="container">
+    <h2 style="color: #333;">Welcome, Admin!</h2>
+    <h3 style="color: #555; margin-bottom: 30px;">This is your dashboard. You can manage various aspects of the system from here.</h3>
+
+    <!-- Search options -->
+    <div class="row">
+      <div class="col-md-4 mb-4 mb-md-0">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Search Users by License Number</h4>
+            <form action="#" method="get">
+              <div class="form-group">
+                <input type="text" class="form-control" name="licenseNumber" placeholder="Enter license number" style="border-radius: 0;">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" style="border-radius: 0;">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 mb-md-0">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Search Vehicle by Registration Number</h4>
+            <form action="#" method="get">
+              <div class="form-group">
+                <input type="text" class="form-control" name="registrationNumber" placeholder="Enter registration number" style="border-radius: 0;">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" style="border-radius: 0;">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Search Booking Details by City</h4>
+            <form action="#" method="get">
+              <div class="form-group">
+                <input type="text" class="form-control" name="city" placeholder="Enter city" style="border-radius: 0;">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block" style="border-radius: 0;">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

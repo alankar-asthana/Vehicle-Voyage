@@ -58,7 +58,7 @@ public class User implements UserDetails {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$", message = "Password must contain at least one lowercase, uppercase, number, and special character")
     private String password;
 
-    private String role = "USER";
+    private String role = "ADMIN";
     private boolean status = true;
 
     @Override

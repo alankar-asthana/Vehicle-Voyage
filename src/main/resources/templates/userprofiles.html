@@ -1,0 +1,48 @@
+<!-- Extend adminLayout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{adminbase :: layout(~{::section})}">
+<head>
+  <title>User Management</title>
+</head>
+<body>
+  <section>
+    <div class="container">
+      <h2 style="color: #333;">User Management</h2>
+      <!-- Search bar -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <form action="#" method="get" class="d-flex align-items-center">
+            <input type="text" class="form-control" id="userIdSearch" placeholder="Search by ID">
+            <button type="submit" class="btn btn-primary ml-3">Search</button>
+          </form>
+        </div>
+      </div>
+      <!-- Table to display users -->
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over users -->
+        <tr th:each="user : ${users}">
+          <td th:text="${user.id}"></td>
+          <td th:text="${user.fullName}"></td>
+          <td th:text="${user.email}"></td>
+          <td>
+            <!-- Action buttons -->
+            <a class="btn btn-primary" th:href="@{/user/profile/__${user.id}__}">View Profile</a>
+            <a class="btn btn-danger" th:href="@{/user/delete/__${user.id}__}">Delete</a>
+            <a class="btn btn-warning" th:href="@{/user/edit/__${user.id}__}">Edit</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</body>
+</html>

@@ -90,8 +90,13 @@ public class Vehicle{
     private Date updatedDate=new Date();
     @DBRef
     private User owner;
+    private double averageRating;
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{adminbase :: layout(~{::section})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Details-Vehicle Voyage</title>
+</head>
+<body>
+  <section>
+    <div class="container">
+      <h2 style="color: #333;">Booking Details</h2>
+      <!-- Search options -->
+      <div class="row">
+        <div class="col-md-4">
+          <form action="#" method="get" class="d-flex align-items-center">
+            <input type="text" class="form-control" id="bookingSearch" placeholder="Search by Registration Number">
+            <button type="submit" class="btn btn-primary ml-3">Search</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Table to display booking details -->
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Booking ID</th>
+          <th>Renter</th>
+          <th>Owner</th>
+          <th>Registration Number</th>
+          <th>Booking Date</th>
+          <th>Total Amount</th>
+          <th>Status</th>
+          <th>Payment Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over booking details -->
+        <tr th:each="booking : ${bookings}">
+          <td th:text="${booking.id}"></td>
+          <td th:text="${booking.user.fullName}"></td>
+          <td th:text="${booking.vehicle.owner.fullName}"></td>
+          <td th:text="${booking.vehicle.registrationNumber}"></td>
+          <td th:text="${booking.bookingDate}"></td>
+          <td th:text="${booking.totalCost}"></td>
+          <td th:text="${booking.bookingStatus}"></td>
+          <td th:text="${booking.paymentStatus}"></td>
+          <td>
+            <!-- Action buttons -->
+            <a class="btn btn-primary" th:href="@{/booking/details/__${booking.id}__}">View</a>
+            <a class="btn btn-danger" th:href="@{/booking/delete/__${booking.id}__}">Cancel</a>
+            <a class="btn btn-warning" th:href="@{/booking/edit/__${booking.id}__}">Edit</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</body>
+</html>

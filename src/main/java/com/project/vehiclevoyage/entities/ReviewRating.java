@@ -19,6 +19,7 @@ public class ReviewRating {
     private String id;
     private String review;
     private double rating;
+
     @DBRef
     private User user;
     @DBRef

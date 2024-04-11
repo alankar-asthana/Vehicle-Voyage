@@ -30,7 +30,7 @@
         <!-- Search Bar -->
         <div class="search-bar d-flex justify-content-center align-items-center bg-dark text-white p-4 mt-3">
             <h2 class="p-5">Search Vehicles</h2>
-            <form class="form-inline">
+            <form class="form-inline" th:action="@{/user/vehicle-booking}">
                 <div class="dropdown">
                     <select class="form-select country" aria-label="Default select example" onchange="loadStates()">
                         <option selected>Select Country</option>

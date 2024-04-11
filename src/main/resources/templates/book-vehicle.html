@@ -8,9 +8,9 @@
 <section>
     <h1 class ="text-center" style="font-weight: bold">Book a vehicle on your way</h1>
     <!-- Search Bar -->
-    <div class="search-bar d-flex justify-content-center align-items-center">
-        <h2 class="p-5" style="font-weight: bold">Search Vehicles</h2>
-        <form class="form-inline" id= "searchForm" th:action="@{/user/available_vehicles}" method="post">
+    <div class="search-bar align-items-center col-md-6 offset-md-3">
+        <h2 class="text-center mt-5" style="font-weight: bold">Search Vehicles</h2>
+        <form class="p-5 align-items-center" id= "searchForm" th:action="@{/user/available_vehicles}" method="post">
             <div class="dropdown">
                 <select class="form-select country" aria-label="Default select example" onchange="loadStates()">
                     <option selected>Select Country</option>
@@ -34,6 +34,7 @@
                     <label class="form-check-label" for="bikeType">Bike</label>
                 </div>
             </div>
+
             <!-- Daily, weekly, monthly radio buttons -->
             <div class="form-group p-2" id="bookingType">
                 <label for="bookingType">Booking Type</label>
@@ -76,9 +77,18 @@
                         <img th:src="@{/images/__${vehicle.frontViewImage}__}" alt="Front View" class="card-img-top shadow rounded img-fluid resize-image">
                         <div class="card-body">
                             <h5 th:text="${vehicle.brandName}+'  '+ ${vehicle.modelName}"></h5>
-                            <p th:text="${vehicle.vehicleType}"></p>
-                            <p th:text="${vehicle.registrationNumber}"></p>
+                            <p th:text="'Vehicle Type: '+${vehicle.vehicleType}"></p>
+                            <p th:text="'Registration number: '+${vehicle.registrationNumber}"></p>
                             <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
+                            <!-- Ratings and reviews -->
+                            <div th:if="${vehicle.averageRating}">
+                                <p>Rating: </p>
+                                <span class="rating"><span class="stars" style="width: calc(100% * ${vehicle.averageRating} / 5);">★★★★★</span>
+                                </span>
+<!--                                //anchor tag to reviews-->
+                                <a th:href="@{/user/reviews/__${vehicle.registrationNumber}__}">Reviews</a>
+                            </div>
+
                             <div class="flex p-3">
                                 <a class="btn btn-primary book-btn" th:href="@{/user/confirm-booking/__${vehicle.registrationNumber}__}">Book</a>
                                 <a class="btn btn-primary view-btn" th:href="@{/user/book/vehicle-details/__${vehicle.registrationNumber}__}">View</a>

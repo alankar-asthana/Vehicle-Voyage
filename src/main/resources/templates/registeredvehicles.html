@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{adminbase :: layout(~{::section})}">
+<head>
+  <title>Vehicle Management - Vehicle Voyage</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body style="background-color: #f8f9fa; padding-top: 50px;">
+  <section>
+    <div class="container">
+      <h2 style="color: #333;">Vehicle Management</h2>
+      <!-- Search bar -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <form action="#" method="get" class="d-flex align-items-center">
+            <input type="text" class="form-control" id="vehicleSearch" placeholder="Search by Registration Number">
+            <button type="submit" class="btn btn-primary ml-3">Search</button>
+          </form>
+        </div>
+      </div>
+      <!-- Table to display vehicles -->
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Brand</th>
+          <th>Model</th>
+          <th>Registration Number</th>
+          <th>Owner ID</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over vehicles -->
+        <tr th:each="vehicle : ${vehicles}">
+          <td th:text="${vehicle.id}"></td>
+          <td th:text="${vehicle.brandName}"></td>
+          <td th:text="${vehicle.modelName}"></td>
+          <td th:text="${vehicle.registrationNumber}"></td>
+          <td th:text="${vehicle.owner.id}"></td>
+          <td>
+            <!-- Action buttons -->
+            <a class="btn btn-primary" th:href="@{/vehicle/details/__${vehicle.id}__}">View</a>
+            <a class="btn btn-danger" th:href="@{/vehicle/delete/__${vehicle.id}__}">Delete</a>
+            <a class="btn btn-warning" th:href="@{/vehicle/edit/__${vehicle.id}__}">Edit</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</body>
+</html>

@@ -5,23 +5,19 @@ import com.project.vehiclevoyage.entities.User;
 import com.project.vehiclevoyage.entities.Vehicle;
 import com.project.vehiclevoyage.helper.Message;
 import com.project.vehiclevoyage.service.BookingDetailsService;
+import com.project.vehiclevoyage.service.ReviewRatingService;
 import com.project.vehiclevoyage.service.UserDetailsServiceImplementation;
 import com.project.vehiclevoyage.service.VehicleService;
 import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
 import jakarta.servlet.http.HttpSession;
-import netscape.javascript.JSObject;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-import com.razorpay.RazorpayClient;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -42,6 +38,9 @@ public class VehicleBookingController {
 
     @Autowired
     private BookingDetailsService bookingDetailsService;
+
+    @Autowired
+    private ReviewRatingService reviewRatingService;
 
 
     //Controller to open vehicle booking page
@@ -73,7 +72,7 @@ public class VehicleBookingController {
             List<BookingDetails> bookedVehicles = bookingDetailsService.findBookedVehicles(
                     bookingDetails.getCity(), bookingDetails.getVehicleType(), bookingDetails.getStartDate(), bookingDetails.getEndDate(), "Booked");
             //Print id of booked vehicles
-            bookedVehicles.forEach(booking -> System.out.println(booking.getVehicle().getId()));
+            bookedVehicles.forEach(booking -> System.out.println("Booked Vehicle ID:"+booking.getVehicle().getId()));
 
             // Filter out booked vehicles from all vehicles to get available vehicles
             List<Vehicle> availableVehicles = allVehicles.stream()
@@ -90,6 +89,18 @@ public class VehicleBookingController {
             }
 
             session.setAttribute("bookingDetails", bookingDetails);
+
+            if (bookingDetails.getStartDate().isBefore(LocalDate.now())) {
+                model.addAttribute("message", new Message("Start date cannot be in the past", "alert-danger"));
+                model.addAttribute("user", user);
+                return "book-vehicle";
+            }
+
+            //Add average rating to each vehicle
+            availableVehicles.forEach(vehicle -> {
+                double averageRating = reviewRatingService.getAverageRatingByVehicleId(vehicle.getId());
+                vehicle.setAverageRating(averageRating);
+            });
 
             model.addAttribute("bookingDetails", bookingDetails);
             model.addAttribute("vehicles", availableVehicles);
