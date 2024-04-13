@@ -42,7 +42,7 @@ public interface BookingDetailsRepository extends MongoRepository<BookingDetails
 
     void deleteByOrderId(String orderId);
 
-    BookingDetails findByVehicleId(String id);
+    List<BookingDetails> findByVehicleId(String id);
 
     List<BookingDetails> findByUserId(String id);
 

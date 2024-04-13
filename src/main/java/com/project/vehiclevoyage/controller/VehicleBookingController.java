@@ -180,6 +180,7 @@ public class VehicleBookingController {
         }
 
         bookingDetails.setTotalCost(totalCost);
+        bookingDetails.setBookingStatus("Pending");
 
         session.setAttribute("bookingDetails", bookingDetails);
 
@@ -212,7 +213,8 @@ public class VehicleBookingController {
             // fetch booking details from database by vehicle id and then first compare the booking status and booking date
             // if booking status is pending and booking date is today then we will not create an order
 
-            BookingDetails bookingDetailsFromDB = bookingDetailsService.getBookingDetailsByVehicleId(bookingDetails.getVehicle().getId());
+            BookingDetails bookingDetailsFromDB = bookingDetailsService.getBookingDetailsForOrderCreation(bookingDetails.getVehicle().getId());
+            System.out.println("bookingDetailsFromDB: " + bookingDetailsFromDB.toString());
             if (bookingDetailsFromDB != null &&
                     bookingDetailsFromDB.getBookingStatus().equals("Pending") &&
                     bookingDetailsFromDB.getBookingDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())) {
@@ -279,7 +281,18 @@ public class VehicleBookingController {
         return ResponseEntity.ok("Booking details deleted successfully");
     }
 
+    //Controller to cancel booking details in database
+    @GetMapping("/user/cancel-booking/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public String cancelBooking(@PathVariable("id") String id, Model model, Principal principal) {
+        BookingDetails bookingDetails = bookingDetailsService.getBookingDetailsById(id);
+        bookingDetails.setBookingStatus("Cancelled");
+        bookingDetailsService.saveBookingDetails(bookingDetails);
 
+        User user = (User) userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "redirect:/user/booking-history";
+    }
 
     //Method to calculate end date based on booking type
     private LocalDate calculateEndDate(BookingDetails bookingDetails) {

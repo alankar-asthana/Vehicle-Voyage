@@ -29,7 +29,7 @@ public class BookingDetailsService {
         bookingDetailsRepository.deleteByOrderId(orderId);
     }
 
-    public BookingDetails getBookingDetailsByVehicleId(String id) {
+    public List<BookingDetails> getBookingDetailsByVehicleId(String id) {
         return bookingDetailsRepository.findByVehicleId(id);
     }
 
@@ -51,5 +51,11 @@ public class BookingDetailsService {
 
     public List<BookingDetails> getBookings() {
         return bookingDetailsRepository.findAll();
+    }
+
+    public BookingDetails getBookingDetailsForOrderCreation(String id) {
+        List <BookingDetails> bookingDetailsList = (List<BookingDetails>) bookingDetailsRepository.findByVehicleId(id);
+        //Fetch the latest booking detail
+        return bookingDetailsList.get(bookingDetailsList.size() - 1);
     }
 }

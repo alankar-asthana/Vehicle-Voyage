@@ -54,8 +54,8 @@
                                     <a class="btn btn-success" th:href="@{/user/confirm-drop-off/{id}(id=${bookingDetails.id})}">Confirm Drop-Off</a>
                                 </div>
                             </div>
-                            <!-- Option to cancel booking. Only for user who has booked the vehicle -->
-                            <div th:if="${bookingDetails.user.id} == ${user.id}">
+                            <!-- Option to cancel booking. Only for user who has booked the vehicle and booking status is not picked-up or drop-off -->
+                            <div th:if="${bookingDetails.user.id} == ${user.id} and (${bookingDetails.bookingStatus} == 'Booked' or ${bookingDetails.bookingStatus} == 'Pending')">
                                 <a class="btn btn-danger" th:href="@{/user/cancel-booking/{id}(id=${bookingDetails.id})}">Cancel Booking</a>
                             </div>
                         </div>
