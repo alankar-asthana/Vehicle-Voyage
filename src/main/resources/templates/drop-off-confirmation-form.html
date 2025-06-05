@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <title>Drop-off Confirmation</title>
 </head>
 <body>
-<h1>Drop-off Confirmation</h1>
+<h1 class="text-center mt-5 mb-5 p-5 bg-light ">Drop-off Confirmation</h1>
 <div class="alert alert-danger" th:if="${error}">
   <p th:text="${error}"></p>
 </div>
-<form action="#" th:action="@{/user/confirm-drop-off/{id}(id=${bookingDetails.id})}" method="post">
-  <div>
-    <label for="otp">Enter OTP:</label>
-    <input type="text" id="otp" name="otp" required>
-  </div>
-  <button type="submit">Confirm Drop-off</button>
-</form>
+<div class="container bg-light text-center">
+    <form action="#" th:action="@{/user/confirm-drop-off/{id}(id=${bookingDetails.id})}" method="post">
+      <div class="form-group mb-3 mt-3 p-3 bg-light">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp" required>
+      </div>
+      <button type="submit">Confirm Drop-off</button>
+    </form>
+</div>
 </body>
 </html>

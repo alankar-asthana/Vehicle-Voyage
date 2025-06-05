@@ -56,6 +56,9 @@ public class BookingDetailsService {
     public BookingDetails getBookingDetailsForOrderCreation(String id) {
         List <BookingDetails> bookingDetailsList = (List<BookingDetails>) bookingDetailsRepository.findByVehicleId(id);
         //Fetch the latest booking detail
+        if(bookingDetailsList.size() == 0) {
+            return null;
+        }
         return bookingDetailsList.get(bookingDetailsList.size() - 1);
     }
 }

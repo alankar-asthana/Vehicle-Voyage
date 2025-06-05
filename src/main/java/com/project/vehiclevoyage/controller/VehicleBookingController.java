@@ -214,10 +214,11 @@ public class VehicleBookingController {
             // if booking status is pending and booking date is today then we will not create an order
 
             BookingDetails bookingDetailsFromDB = bookingDetailsService.getBookingDetailsForOrderCreation(bookingDetails.getVehicle().getId());
-            System.out.println("bookingDetailsFromDB: " + bookingDetailsFromDB.toString());
+
             if (bookingDetailsFromDB != null &&
                     bookingDetailsFromDB.getBookingStatus().equals("Pending") &&
                     bookingDetailsFromDB.getBookingDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().equals(LocalDate.now())) {
+                System.out.println("bookingDetailsFromDB: " + bookingDetailsFromDB.toString());
                 throw new Exception("Order is already created for this vehicle");
             }
 

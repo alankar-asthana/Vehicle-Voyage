@@ -17,14 +17,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String username = userDetails.getUsername();
         Set<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
 
-        // Example logic based on username or roles
         String targetUrl;
         if (roles.contains("ADMIN")) {
             targetUrl = "/admin/admindashboard";
@@ -33,9 +31,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         } else {
             targetUrl = "/home";
         }
-
         response.sendRedirect(targetUrl);
     }
-
-
 }

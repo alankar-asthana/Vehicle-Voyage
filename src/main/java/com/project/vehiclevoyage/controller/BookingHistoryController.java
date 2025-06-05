@@ -51,6 +51,9 @@ public class BookingHistoryController {
         bookingDetailsList.addAll(bookingDetailsByUserId);
         bookingDetailsList.addAll(bookingDetailsByOwnerId);
 
+        //Sort the booking details in reverse order
+        Collections.reverse(bookingDetailsList);
+
         //Sort the list of booking details by booking date
         bookingDetailsList.sort((a, b) -> a.getBookingDate().compareTo(b.getBookingDate()));
         //Print the list of booking details

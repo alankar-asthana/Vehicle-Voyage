@@ -7,7 +7,7 @@
 </head>
 <body style="background-color: #f8f9fa; padding-top: 50px;">
   <section>
-    <div class="container">
+    <div class="container mr-auto">
       <h2 style="color: #333;">Vehicle Management</h2>
       <!-- Search bar -->
       <div class="row mb-3">
@@ -40,9 +40,9 @@
           <td th:text="${vehicle.owner.id}"></td>
           <td>
             <!-- Action buttons -->
-            <a class="btn btn-primary" th:href="@{/vehicle/details/__${vehicle.id}__}">View</a>
-            <a class="btn btn-danger" th:href="@{/vehicle/delete/__${vehicle.id}__}">Delete</a>
-            <a class="btn btn-warning" th:href="@{/vehicle/edit/__${vehicle.id}__}">Edit</a>
+            <a class="btn btn-primary rounded-pill" th:href="@{/vehicle/details/__${vehicle.id}__}">View</a>
+            <a class="btn btn-danger rounded-pill" th:href="@{/vehicle/delete/__${vehicle.id}__}">Delete</a>
+            <a class="btn btn-warning rounded-pill" th:href="@{/vehicle/edit/__${vehicle.id}__}">Edit</a>
           </td>
         </tr>
         </tbody>

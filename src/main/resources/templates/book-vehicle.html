@@ -81,12 +81,12 @@
                             <p th:text="'Registration number: '+${vehicle.registrationNumber}"></p>
                             <p th:text="'price: '+${vehicle.vehicleType == 'Bike' ? '500' : '1000'} + ' INR/ -per day'"></p>
                             <!-- Ratings and reviews -->
-                            <div th:if="${vehicle.averageRating}">
-                                <p>Rating: </p>
-                                <span class="rating"><span class="stars" style="width: calc(100% * ${vehicle.averageRating} / 5);">★★★★★</span>
-                                </span>
+                            <div th:if="${vehicle.averageRating}" class="rating d-flex">
+                                <p>Rating: <span th:text="${vehicle.averageRating}"></span></p>
+<!--                                <span class="rating"><span class="stars" style="width: calc(100% * ${vehicle.averageRating} / 5);">★★★★★</span>-->
+<!--                                </span>-->
 <!--                                //anchor tag to reviews-->
-                                <a th:href="@{/user/reviews/__${vehicle.registrationNumber}__}">Reviews</a>
+                                <a th:href="@{/user/reviews/__${vehicle.registrationNumber}__}" class="ml-2">Reviews</a>
                             </div>
 
                             <div class="flex p-3">
